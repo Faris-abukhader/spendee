@@ -12,7 +12,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to Ewallet
+          Welcome to E-wallet
         </h1>
         </main>
     </div>
