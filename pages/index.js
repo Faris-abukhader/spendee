@@ -3,6 +3,7 @@ import { getSession } from "next-auth/react"
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Nav from '../components/general/Nav'
+import Error from '../components/general/customModals/Error'
 export default function Home({session}) {
 
   return (
@@ -14,6 +15,7 @@ export default function Home({session}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
     <Nav/>
+    <Error/>
       <main className={styles.main}>
         <h1 className={styles.title}>
           Welcome to E-wallet
