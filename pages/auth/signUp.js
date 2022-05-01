@@ -1,19 +1,32 @@
 import {useState} from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import {Form,FloatingLabel} from 'react-bootstrap'
 import axios from 'axios'
 import Error from '../../components/general/customModals/Error'
 import Sucess from '../../components/general/customModals/Sucess'
+import emailValidation from  "../.../../../validation/email"
+import {passwordStrength,isEqual} from  "../.../../../validation/password"
+import PasswordStrengthIndicator from '../../components/auth/PasswordStrengthIndicator'
 export default function signUp({apiEndpoint}) {
   var [newUser,setNewUser] = useState({email:'',password:'',prePassword:'',firstName:'',lastName:''})
-  var [waring,setWarning] = useState({password:'',prePassword:'',firstName:'',lastName:''})
+  var [waring,setWarning] = useState({email:'',prePassword:'',firstName:'',lastName:''})
   var [disable,setDisable] = useState(true)
   var [showModal,setShowModal] = useState({sucess:false,error:false})
+  var [alert,showAlert] = useState(false)
+
+  const testBcrypt = async()=>{
+    const salt = bcrypt.genSalt(10)
+    const myPassword = "Fares_455."
+    const hashedPassword = await bcrypt.hash(myPassword)
+    console.log(salt)
+    console.log(hashedPassword)  
+  }
+
+  testBcrypt()
+
 
   function inputHandler(event){
     const {name , value} = event.target
-    validation(name)
     setNewUser((prevs)=>{
       return{
         ...prevs,
@@ -22,14 +35,26 @@ export default function signUp({apiEndpoint}) {
     })
     validation(name)
     buttonEnable() 
-    buttonEnable()
-
-
-
   }
 
-
   function validation(name){
+    if(name=="email"){
+      if(!emailValidation(newUser.email)){
+        setWarning((prevs)=>{
+          return {
+            ...prevs,
+            ['email']:'Email is not valid'
+          }
+        })
+      }else{
+        setWarning((prevs)=>{
+          return {
+            ...prevs,
+            ['email']:''
+          }
+        })
+      }
+    }
     if(name=='password'){
        if(newUser.password.length<8){
         setWarning((prevs)=>{
@@ -48,7 +73,8 @@ export default function signUp({apiEndpoint}) {
        }
     }
     if(name == 'prePassword'){
-      if(newUser.password.localeCompare(newUser.prePassword)!=0){
+      if(!isEqual(newUser.password,newUser.prePassword)){
+        if(!(newUser.password!=newUser.prePassword)){
         setWarning((prevs)=>{
           return{
             ...prevs,
@@ -65,7 +91,7 @@ export default function signUp({apiEndpoint}) {
       }
     }
     if(name == 'firstName'){
-      if(newUser.firstName.length>=5 && newUser.firstName.length<=10){
+      if(newUser.firstName.length>=3 && newUser.firstName.length<=10){
         setWarning((prevs)=>{
           return{
             ...prevs,
@@ -77,13 +103,13 @@ export default function signUp({apiEndpoint}) {
         setWarning((prevs)=>{
           return{
             ...prevs,
-            ['firstName']:'First name should length should be in 5 ~ 10'
+            ['firstName']:'First name should length should be in 3 ~ 10'
           }
         })  
       }
     }
     if (name == 'lastName'){
-      if(newUser.lastName.length>=5 && newUser.lastName.length<=10){
+      if(newUser.lastName.length>=3 && newUser.lastName.length<=10){
         setWarning((prevs)=>{
           return{
             ...prevs,
@@ -95,15 +121,16 @@ export default function signUp({apiEndpoint}) {
         setWarning((prevs)=>{
           return{
             ...prevs,
-            ['lastName']:'Last name should length should be in 5 ~ 10'
+            ['lastName']:'Last name should length should be in 3 ~ 10'
           }
         })  
       }
     }
   }
+}
 
   function buttonEnable(){
-    if(newUser.email.length>5 && newUser.firstName.length>=5 && newUser.firstName.length<=10 && newUser.lastName.length>=5 && newUser.lastName.length<=10){
+    if(emailValidation(newUser.email) && passwordStrength(newUser.password).value === 'Strong' && newUser.firstName.length>=3 && newUser.firstName.length<=10 && newUser.lastName.length>=3 && newUser.lastName.length<=10){
       setDisable(false)
     }else{
       setDisable(true)
@@ -111,11 +138,12 @@ export default function signUp({apiEndpoint}) {
   }
 
   function submit(){
-    const token = "fafrefraef"
+    const token = "fafrefraef" 
     axios.post(`${apiEndpoint}/user`,newUser,{headers:{"X-auth-token":token}})
     .then(response=>{
-      console.log(response)
       if(response.data.state){
+        reset()
+        showAlert(true)
         setShowModal({sucess:true,error:false})
         setTimeout(() => {
           setShowModal({sucess:false,error:false})
@@ -156,23 +184,25 @@ export default function signUp({apiEndpoint}) {
             className="mb-3"
             >
             <Form.Control type="email" name='email' value={newUser.email} onChange={inputHandler} />
+            {waring.email && <div style={{color:'red',fontSize:'11px'}}>{waring.email}</div>}
             </FloatingLabel>
             <FloatingLabel
             controlId="floatingInput"
             label="Password"
-            className="mb-3"
+            className="mb-2"
             >
             <Form.Control type="password" name='password' value={newUser.password} onChange={inputHandler}/>
             </FloatingLabel>
-            {waring.password &&<div style={{color:'red'}}><small className='mb-2'>{waring.password}</small></div>}
+            {newUser.password && <PasswordStrengthIndicator password={newUser.password}/>}
+            {passwordStrength(newUser.password).notEncluded.length !=0 ? <div style={{color:'darkgray',fontSize:'9px'}}>Password should have {passwordStrength(newUser.password).notEncluded.map((item)=><span>{item},</span>)} and length 6 to be accepted.</div>:<div></div>}
             <FloatingLabel
             controlId="floatingInput"
             label="Re-password"
-            className="mb-3"
+            className="my-2"
             >
             <Form.Control type="password" name='prePassword' value={newUser.prePassword} onChange={inputHandler} />
             </FloatingLabel>
-            {waring.prePassword &&<div style={{color:'red'}}><small className='mb-2'>{waring.prePassword}</small></div>}
+            {waring.prePassword &&<div style={{color:'red',fontSize:'11px'}}><small>{waring.prePassword}</small></div>}
             <FloatingLabel
             controlId="floatingInput"
             label="First Name"
@@ -198,6 +228,7 @@ export default function signUp({apiEndpoint}) {
               <button className='btn btn-light col-4 m-2' style={{background:'rgb(8,105,251)',color:'white'}} disabled={disable} onClick={submit}>Sign up</button>
               <button className='btn btn-outline-warning col-4 m-2' style={{color:'black'}} onClick={reset}>Reset</button>
             </div>
+            {alert && <div class="alert alert-success text-center" role="alert">We've sent a link to your email address: <b>{newUser.email}</b> Please follow the link inside to continue</div>}
           </div>
         </div>
         </div>

@@ -4,12 +4,10 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import {Form,FloatingLabel} from 'react-bootstrap'
 import axios from 'axios'
-import Error from '../../components/general/customModals/Error'
-import Sucess from '../../components/general/customModals/Sucess'
+import emailValidation from  "../.../../../validation/email"
 export default function SignIn({ csrfToken }) {
   var [user,setuser] = useState({email:'',password:'',csrfToken:csrfToken})
   var [disable,setDisable] = useState(true)
-  var [showModal,setShowModal] = useState({sucess:false,error:false})
 
   const router = useRouter()
 
@@ -28,7 +26,7 @@ export default function SignIn({ csrfToken }) {
 
   
   function buttonEnable(){
-    if(user.email.length>5 && user.password.length>=5){
+    if(emailValidation(user.email) && user.password.length>=4){
       setDisable(false)
     }else{
       setDisable(true)
@@ -38,29 +36,10 @@ export default function SignIn({ csrfToken }) {
   function submit(e){
     e.preventDefault()
     axios.post(`/api/auth/callback/credentials`,user)
-    .then(response=>{
+    .then(()=>{
         router.push('/')
     })
-    .catch(err=>{
-      // setShowModal({sucess:false,error:true})
-      // setTimeout(() => {
-      //   setShowModal({sucess:false,error:false})
-      // }, 500);
-    })
   }
-
-  let {error} = router.query
-  // console.log("Error : "+error)
-
-  // if(callbackUrl.length>3){
-  //   setShowModal({sucess:false,error:true})
-  //   setTimeout(() => {
-  //     setShowModal({sucess:false,error:false})
-  //   }, 500);  
-  //   callbackUrl = ""
-  // }
-
-
 
 
   function reset(){
@@ -106,20 +85,9 @@ export default function SignIn({ csrfToken }) {
         </div>
       </div>
     </div>
-    <Error show={showModal.error} message={`Email or password isn't correct`}/>
-    <Sucess show={showModal.sucess} message={`Registeration done sucessfully`}/>
     </>
   )
 }
-
-// export const getServerSideProps = async()=>{
-//   const apiEndPoint = process.env.API_URL
-//   return{
-//     props:{
-//       apiEndpoint:apiEndPoint
-//     }
-//   }
-// }
 
 export async function getServerSideProps(context) {
   return {

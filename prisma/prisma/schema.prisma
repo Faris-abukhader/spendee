@@ -114,11 +114,11 @@ model User {
   firstName                 String?
   secondName                String?
   email                     String?                     @unique
-  password                  String?
-  emailVerified             DateTime?
   image                     String?
   gender                    String?
   age                       Int                         @default(0)
+  password                  String?
+  emailVerified             Boolean                     @default(false)
   Account                   Account[]
   CustomTransactionCatogery CustomTransactionCatogery[]
   Session                   Session[]

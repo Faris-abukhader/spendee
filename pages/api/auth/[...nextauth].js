@@ -30,11 +30,11 @@ export default NextAuth({
         },
       },
       async authorize(credentials) {
-        console.log(credentials)
         const data = await prisma.user.findFirst({
         where:{
           email:credentials.email,
-          password:credentials.password
+          password:credentials.password,
+          emailVerified:true
         }
       })
       console.log(data)
@@ -43,8 +43,7 @@ export default NextAuth({
       }else{
         throw new Error("user is not found");
       }
-
-      },
+     },
     }),
   ],
   callbacks:{
@@ -69,5 +68,6 @@ export default NextAuth({
         secret:process.env.JWT_SECRET,
         encryption:true
       },
+      debug:true
 });
 
