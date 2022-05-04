@@ -71,6 +71,11 @@ export default function SignIn({ csrfToken }) {
             >
             <Form.Control type="password" name='password' value={user.password} onChange={inputHandler}/>
             </FloatingLabel>
+            <div className='text-end'>
+              <Link href='/auth/twoStep'>
+                <a style={{textDecoration:'none'}}><small>Forget password?</small></a>
+              </Link>
+            </div>
             <div className='row justify-content-center'>
               <button className='btn btn-light col-4 m-2' style={{background:'rgb(8,105,251)',color:'white'}} disabled={disable} onClick={submit}>Sign in</button>
               <button className='btn btn-outline-warning col-4 m-2' style={{color:'black'}} onClick={reset}>Reset</button>

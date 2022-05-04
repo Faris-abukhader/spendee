@@ -14,16 +14,6 @@ export default function signUp({apiEndpoint}) {
   var [showModal,setShowModal] = useState({sucess:false,error:false})
   var [alert,showAlert] = useState(false)
 
-  const testBcrypt = async()=>{
-    const salt = bcrypt.genSalt(10)
-    const myPassword = "Fares_455."
-    const hashedPassword = await bcrypt.hash(myPassword)
-    console.log(salt)
-    console.log(hashedPassword)  
-  }
-
-  testBcrypt()
-
 
   function inputHandler(event){
     const {name , value} = event.target
@@ -171,7 +161,7 @@ export default function signUp({apiEndpoint}) {
   return (
     <>
     <div className='fluid-container' style={{background:'rgba(240,242,245,1.0)'}}>
-      <div className='row justify-content-center align-items-center' style={{minHeight:'100vh'}}>
+      <div className='row justify-content-center align-items-center mx-3' style={{minHeight:'100vh'}}>
         <div className='col card' style={{background:'white',borderRadius:'10px',border:'none',boxShadow:'0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%)',maxWidth:'500px'}}>
           <div className='col'style={{background:'white',borderRaduis:'20px',borderShadow:'0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%)'}}>
             <div className='p-3'>
