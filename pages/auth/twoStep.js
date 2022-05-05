@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Form,FloatingLabel } from "react-bootstrap"
 import Link from "next/link"
-import { useRouter } from 'next/router'
 import axios from 'axios'
 import emailValidation from  "../.../../../validation/email"
 export default function twoSetp({apiEndpoint}) {
@@ -9,7 +8,6 @@ export default function twoSetp({apiEndpoint}) {
     var [email,setEmail] = useState('')
     var [buttonDisable,setButtonDisable] = useState(true)
     var [alert,showAlert] = useState({sucess:false,error:false})
-    const router = useRouter()
 
     function isEnable(){
        if(emailValidation(email)){
@@ -30,11 +28,10 @@ export default function twoSetp({apiEndpoint}) {
       })
     }
 
-
   return (
 <>
     <div className='fluid-container' style={{background:'rgba(240,242,245,1.0)'}}>
-      <div className='row justify-content-center align-items-center mx-3' style={{minHeight:'100vh'}}>
+      <div className='row justify-content-center align-items-center px-3 mx-5' style={{minHeight:'100vh'}}>
         <div className='col card' style={{background:'white',borderRadius:'10px',border:'none',boxShadow:'0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%)',maxWidth:'500px'}}>
           <div className='col'style={{background:'white',borderRaduis:'20px',borderShadow:'0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%)'}}>
             <div className='p-3'>
@@ -71,6 +68,7 @@ export default function twoSetp({apiEndpoint}) {
 }
 export const getServerSideProps = async()=>{
   const apiEndPoint = process.env.API_URL
+  console.log(apiEndPoint)
   return{
     props:{
       apiEndpoint:apiEndPoint

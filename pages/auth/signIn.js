@@ -1,15 +1,11 @@
 import {useState} from 'react'
-import { getCsrfToken } from "next-auth/react"
-import { useRouter } from 'next/router'
+import { getCsrfToken,signIn } from "next-auth/react"
 import Link from 'next/link'
 import {Form,FloatingLabel} from 'react-bootstrap'
-import axios from 'axios'
 import emailValidation from  "../.../../../validation/email"
 export default function SignIn({ csrfToken }) {
   var [user,setuser] = useState({email:'',password:'',csrfToken:csrfToken})
   var [disable,setDisable] = useState(true)
-
-  const router = useRouter()
 
   function inputHandler(event){
     const {name , value} = event.target
@@ -33,17 +29,22 @@ export default function SignIn({ csrfToken }) {
     }
   }
 
-  function submit(e){
+  async function submit(e){
     e.preventDefault()
-    axios.post(`/api/auth/callback/credentials`,user)
-    .then(()=>{
-        router.push('/')
-    })
+
+    let test = await signIn('credentials',{
+      redirect:true,
+      callbackUrl:process.env.BASE_URL,
+      email:user.email,
+      password:user.password
+    });
+
+    console.log(test)
   }
 
 
   function reset(){
-    setuser({email:'',password:'',prePassword:'',firstName:'',lastName:''})
+    setuser({email:'',password:''})
   }
 
 
