@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import OffCanvas from './OffCanvas'
 import { Dropdown, DropdownButton } from 'react-bootstrap'
+import Link from 'next/link'
 export default function Nav() {
     var [showOffCanvas, setShowOffCanvas] = useState(false)
 
@@ -34,7 +35,7 @@ export default function Nav() {
                                 variant="outline-secondary"
                                 title="Dropdown"
                                 id="input-group-dropdown-1">
-                                <Dropdown.Item href="#">Action</Dropdown.Item>
+                                <Dropdown.Item href="/dashboard/settings" >Settings</Dropdown.Item>   
                                 <Dropdown.Item href="#">Another action</Dropdown.Item>
                                 <Dropdown.Item href="#">Something else here</Dropdown.Item>
                                 <Dropdown.Divider />

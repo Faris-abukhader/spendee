@@ -1,6 +1,8 @@
 import React from 'react'
-import { FloatingLabel,Form } from 'react-bootstrap'
+import { FloatingLabel,Form, NavItem } from 'react-bootstrap'
+import iconsList from '../../public/icons/categories/iconsList.json'
 export default function Accounts() {
+
   return (
     <div className='px-4 mb-3'>
         <h2 className='my-5'>Accout Settings</h2>
@@ -53,7 +55,11 @@ export default function Accounts() {
             </div>
         </div>
 
-        
+      <div className='bg-primary'>
+
+     {iconsList.map((item)=><><h1>{item.title}</h1><img style={{background:`${item.type == 'expense'? 'red':'green'}`,borderRadius:'50%'}} src={`/icons/categories/categories_icon/${item.icon}`}/></>)}
+     </div>
+
     </div>
   )
 }
