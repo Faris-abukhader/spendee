@@ -3,15 +3,27 @@
 }
 
 
-.nav-link{
-    margin:19px 15px 0px;
-    padding: 0px 0px 15px;
+.menu .nav-item .nav-link{
+    /* margin: 0px 0px;
+    padding: 0px 0px 0px; */
     color: #666666;
     border-bottom: 2px solid white;
     transition: 500ms;
 }
 
-.nav-link:hover {
+#navbarSupportedContent .nav-item .nav-link:hover {
     border-bottom: 2px solid #00A3FF;
     color: #00A3FF;
+}
+
+@media only screen and (min-width: 768px) {
+    .report .list-group-item{
+        width:25%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .bottomMenu{
+        display: none;
+    }
 }
