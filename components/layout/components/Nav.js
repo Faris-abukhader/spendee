@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import OffCanvas from './OffCanvas'
-import { Dropdown, DropdownButton } from 'react-bootstrap'
+import { Dropdown, ButtonGroup } from 'react-bootstrap'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 export default function Nav() {
+    const { data: session, status } = useSession()
     var [showOffCanvas, setShowOffCanvas] = useState(false)
 
     function toggleOffCanvas() {
@@ -32,17 +34,19 @@ export default function Nav() {
                             </li>
                         </ul>
                         <div className="dropdown ms-auto">
-                            <DropdownButton
-                                variant="outline-secondary"
-                                title="Dropdown"
-                                id="input-group-dropdown-1">
-                                <Dropdown.Item href="/dashboard/settings" >Settings</Dropdown.Item>   
-                                <Dropdown.Item href="#">Another action</Dropdown.Item>
-                                <Dropdown.Item href="#">Something else here</Dropdown.Item>
-                                <Dropdown.Divider />
-                                <Dropdown.Item href="#">Separated link</Dropdown.Item>
-                                <Dropdown.Item onClick={signOut}>Sign out</Dropdown.Item>
-                            </DropdownButton>
+                            <Dropdown as={ButtonGroup}>
+                                <butt className='btn btn-light' style={{ background: 'none' }}>
+                                    <img class="img-fluid mx-2" src={`/icons/nav/user.svg`} alt="user_icon" style={{ borderRadius: '50%' }} />
+                                    <span>{session && session.user.name}</span>
+                                </butt>
+                                <Dropdown.Toggle split variant="light" id="dropdown-split-basic" style={{ background: 'none' }} />
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href="/dashboard/settings?option=1">Settings</Dropdown.Item>
+                                    <Dropdown.Item href="/dashboard/settings?option=3">Support</Dropdown.Item>
+                                    <Dropdown.Divider />
+                                    <Dropdown.Item onClick={signOut}>Sign out</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </div>
                     </div>
                 </div>

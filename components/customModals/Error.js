@@ -1,6 +1,6 @@
 import React from 'react'
 import Lottie from 'react-lottie'
-import errorAnimation from "../../../public/lottie/error.json"
+import errorAnimation from "../../public/lottie/error.json"
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 

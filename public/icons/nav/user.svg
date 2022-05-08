@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="34px" height="34px" viewBox="0 0 92 92" version="1.1" style="background: #EBEFF2;">
+    <title>Profile Picture Placeholder</title>
+    <g id="Profile-Picture-Placeholder" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#EBEFF2" x="0" y="0" width="92" height="92"/>
+        <g id="Group" transform="translate(8.000000, 15.000000)" fill="#AEB9C0">
+            <path d="M38,39.7619048 C47.6819048,39.7619048 55.5238095,29.844712 55.5238095,20.047619 C55.5238095,10.2505261 47.6819048,0.333333333 38,0.333333333 C28.3180952,0.333333333 20.4761905,10.327422 20.4761905,20.047619 C20.4761905,29.7678161 28.3180952,39.7619048 38,39.7619048 Z M38,46.3333333 C25.9615061,46.3333333 0.761904762,50.343921 0.761904762,65.3174603 L0.761904762,77 L75.2380952,77 L75.2380952,65.3174603 C75.2380952,50.4994442 50.0384939,46.3333333 38,46.3333333 Z" id="Combined-Shape"/>
+        </g>
+    </g>
+</svg>

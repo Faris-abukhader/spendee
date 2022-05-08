@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import { FloatingLabel,Form, NavItem } from 'react-bootstrap'
+import { FloatingLabel,Form } from 'react-bootstrap'
 import EventEmitter from '../../utils/EventEmitter'
 export default function Accounts() {
 
@@ -17,7 +17,6 @@ export default function Accounts() {
   return (
     <div className='px-4 mb-3'>
         <h2 className='my-5'>Accout Settings</h2>
-
         <div className='text-start mb-2' style={{color:'darkgray'}}>
             Profile photo
         </div>

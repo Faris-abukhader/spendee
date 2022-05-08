@@ -1,9 +1,8 @@
 import React from 'react'
 import { Offcanvas, Dropdown, DropdownButton } from 'react-bootstrap'
-
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
-export default function OffCanvas(props) { 
-            
+export default function OffCanvas(props) {   
     return (
       <>  
         <Offcanvas show={props.show} onHide={props.showToggle}>
@@ -11,21 +10,13 @@ export default function OffCanvas(props) {
             <Offcanvas.Title>Sidelist</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-          <div>
-            Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
-          </div>
-          <div class="dropdown mt-3">
-          <DropdownButton
-            variant="outline-secondary"
-            title="Dropdown"
-            id="input-group-dropdown-1">
-            <Dropdown.Item href="#">Action</Dropdown.Item>
-            <Dropdown.Item href="#">Another action</Dropdown.Item>
-            <Dropdown.Item href="#">Something else here</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item href="#">Separated link</Dropdown.Item>
-        </DropdownButton>
-          </div>
+            <Link href='/dashboard/settings?option=1'>
+          <a className='btn btn-lg btn-light mb-3' style={{background:'#45a7e6',width:'100%'}}>settings</a>
+          </Link>
+          <Link href='/dashboard/settings?option=3'>
+          <a className='btn btn-lg btn-light mb-3' style={{background:'#45a7e6',width:'100%'}}>Support</a>
+          </Link>
+          <button onClick={signOut} className='btn btn-lg btn-light mb-3' style={{background:'#45a7e6',width:'100%'}}>Sign out</button>
             </Offcanvas.Body>
         </Offcanvas>
       </>
