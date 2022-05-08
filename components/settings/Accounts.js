@@ -1,7 +1,18 @@
-import React from 'react'
+import {useState} from 'react'
 import { FloatingLabel,Form, NavItem } from 'react-bootstrap'
-import iconsList from '../../public/icons/categories/iconsList.json'
+import EventEmitter from '../../utils/EventEmitter'
 export default function Accounts() {
+
+  var [userData,setUserData] = useState({email:'',firstName:'',secondName:'',image:'',gender:'',age:0})
+
+
+  function submit(){
+    // . . . 
+
+    EventEmitter.emit('reloadSession',{userData})
+    EventEmitter.emit('testEvent',{userData})
+
+  }
 
   return (
     <div className='px-4 mb-3'>
@@ -51,14 +62,11 @@ export default function Accounts() {
 
             <hr/>
             <div className='text-end'>
-                <button className='btn btn-sm btn-primary'>Save my settings</button>
+                <button id='modifyUserButton' onClick={submit} className='btn btn-sm btn-primary'>Save my settings</button>
             </div>
         </div>
 
-      <div className='bg-primary'>
-
-     {iconsList.map((item)=><><h1>{item.title}</h1><img style={{background:`${item.type == 'expense'? 'red':'green'}`,borderRadius:'50%'}} src={`/icons/categories/categories_icon/${item.icon}`}/></>)}
-     </div>
+      
 
     </div>
   )

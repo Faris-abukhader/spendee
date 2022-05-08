@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import OffCanvas from './OffCanvas'
 import { Dropdown, DropdownButton } from 'react-bootstrap'
+import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 export default function Nav() {
     var [showOffCanvas, setShowOffCanvas] = useState(false)
@@ -10,7 +11,7 @@ export default function Nav() {
     }
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light" style={{ boxShadow: "0px 1px 5px rgba(128, 128, 128, 0.5);" }}>
+            <nav className="navbar navbar-expand-lg navbar-light" style={{ boxShadow: "0px 1px 5px rgba(128, 128, 128, 0.5)" }}>
                 <div className="container-fluid my-0 py-0" style={{ width: '100%' }}>
                     <a className="navbar-brand" href="#">
                         <img src="/Ahmed/Pictures/logo.png" width="200" height="45" />
@@ -40,6 +41,7 @@ export default function Nav() {
                                 <Dropdown.Item href="#">Something else here</Dropdown.Item>
                                 <Dropdown.Divider />
                                 <Dropdown.Item href="#">Separated link</Dropdown.Item>
+                                <Dropdown.Item onClick={signOut}>Sign out</Dropdown.Item>
                             </DropdownButton>
                         </div>
                     </div>

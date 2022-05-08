@@ -1,12 +1,23 @@
 import {useState} from 'react'
+import { useRouter } from 'next/router'
 import ClientLayout from '../../../components/layout/Client'
 import Accounts from '../../../components/settings/Accounts'
 import AllCategories from '../../../components/settings/AllCategories'
 import Support from '../../../components/settings/Support'
+import { useSession } from 'next-auth/react'
 export default function index() {
-  var [option,chooseOption] = useState(1)
+  const {data:session,status} = useSession()
+
+  console.log(session)
+
+  const router = useRouter()
+  let {query} = router
+  var [option,chooseOption] = useState(query.option ? query.option:1)
   function buttonHandler(event){
-    chooseOption((event.target.name))
+    router.replace({
+      query: { ...router.query, option: event.target.name },
+   });   
+    chooseOption(Number.parseInt(event.target.name))
   }
   return (
     <ClientLayout>

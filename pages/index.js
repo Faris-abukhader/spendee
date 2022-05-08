@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
-import { getSession } from "next-auth/react"
+import { getSession, useSession } from "next-auth/react"
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Error from '../components/general/customModals/Error'
 import ClientLayout from '../components/layout/Client'
 export default function Home({session}) {
+
 
   return (
     <ClientLayout>
@@ -29,7 +30,6 @@ export default function Home({session}) {
 export const getServerSideProps = async (ctx)=> {
   const session = await getSession(ctx )
 
-  console.log(session)
   if (session) {
     return{
       props:{
