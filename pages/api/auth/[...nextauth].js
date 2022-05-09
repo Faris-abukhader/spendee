@@ -1,10 +1,7 @@
 import NextAuth from "next-auth"
 import CredentialsProvider  from "next-auth/providers/credentials";
-import { PrismaClient } from "@prisma/client"
 import('next').NextConfig
 import EventEmitter from "../../../utils/EventEmitter";
-
-const prisma = new PrismaClient()
 
 let newUserData = null
 EventEmitter.addListener('reloadSession',(data)=>{
