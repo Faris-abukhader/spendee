@@ -2,8 +2,8 @@ import {useState} from 'react'
 import Link from 'next/link'
 import {Form,FloatingLabel} from 'react-bootstrap'
 import axios from 'axios'
-import Error from '../../components/general/customModals/Error'
-import Sucess from '../../components/general/customModals/Sucess'
+import Error from '../../components/customModals/Error'
+import Sucess from '../../components/customModals/Sucess'
 import emailValidation from  "../.../../../validation/email"
 import {passwordStrength,isEqual} from  "../.../../../validation/password"
 import PasswordStrengthIndicator from '../../components/auth/PasswordStrengthIndicator'

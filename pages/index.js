@@ -5,6 +5,7 @@ import styles from '../styles/Home.module.css'
 import ClientLayout from '../components/layout/Client'
 import WalletCard from '../components/home/WalletCard'
 import OverviewCard from '../components/home/OverviewCards'
+import DateRangePicker from '../components/home/DateRangePicker'
 export default function Home({session}) {
 
 
@@ -26,13 +27,22 @@ export default function Home({session}) {
 
 <WalletCard amount={3000}/>
 
-<h3 className='my-5'>Overview</h3>
+
+<div style={{marginTop:'50px'}} className='row align-items-between justify-content-center pt-4'>
+<h3 className=' col-lg-6 col-md-6 col-sm-12 mb-4' style={{marginRight:'auto'}}>Overview</h3>
+<div className='col-lg-6 col-md-6 col-sm-12'>
+<DateRangePicker/>
+</div>
+</div>
 
 
 </div>
 </div>
+  
     <OverviewCard/>
+
     </div>
+
     </ClientLayout>
   )
 }
