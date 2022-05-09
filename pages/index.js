@@ -14,6 +14,7 @@ export default function Home({session}) {
 
   return (
     <ClientLayout>
+
     <div className='pt-4'>
       <Head>
         <title>Create Next App</title>
@@ -40,10 +41,24 @@ export default function Home({session}) {
 </div>
   
     <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
+    <OverviewCard/>
 
     </div>
 
     </ClientLayout>
+    
   )
 }
 

@@ -14,6 +14,9 @@
     color: #00A3FF;
 }
 
+
+
+
 .bottomMenu .nav-link{
     color: #666666;
     transition: 500ms;
@@ -23,14 +26,18 @@
     color: #00A3FF;
 }
 
+@media only screen and (min-width: 992px) {
+    .bottomMenu{
+        display: none;
+    }
+}
+
+
+
+
 @media only screen and (min-width: 768px) {
     .report .list-group-item{
         width:25%;
     }
 }
 
-@media only screen and (min-width: 992px) {
-    .bottomMenu{
-        display: none;
-    }
-}
