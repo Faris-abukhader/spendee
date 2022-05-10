@@ -51,12 +51,13 @@ export default function SignIn({ csrfToken }) {
   return (
     <>
     <div className='fluid-container' style={{background:'rgba(240,242,245,1.0)'}}>
-      <div className='row justify-content-center align-items-center' style={{minHeight:'100vh'}}>
-        <div className='col card' style={{background:'white',borderRadius:'10px',border:'none',boxShadow:'0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%)',maxWidth:'500px'}}>
+      <div className='row justify-content-center align-items-center p-o m-0' style={{minHeight:'100vh'}}>
+        <div className='col card mx-2' style={{background:'white',borderRadius:'10px',border:'none',boxShadow:'0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%)',maxWidth:'500px'}}>
           <div className='col'style={{background:'white',borderRaduis:'20px',borderShadow:'0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%)'}}>
             <div className='p-3'>
               <div className='text-center mb-4'>
                 <img src='/Ahmed/Pictures/logo.png' style={{width:'60%'}}/>
+                <h1 className='mt-3' style={{fontWeight:'500'}}>Sign in</h1>
               </div>
             <FloatingLabel
             controlId="floatingInput"

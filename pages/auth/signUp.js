@@ -167,6 +167,7 @@ export default function signUp({apiEndpoint}) {
             <div className='p-3'>
               <div className='text-center mb-4'>
                 <img src='/Ahmed/Pictures/logo.png' style={{width:'60%'}}/>
+                <h1 className='mt-3'>Sign up</h1>
               </div>
             <FloatingLabel
             controlId="floatingInput"
