@@ -6,7 +6,7 @@ import ColorSelector from './components/ColorSelector'
 import { FloatingLabel,Form } from 'react-bootstrap'
 import EventEmitter from '../../utils/EventEmitter'
 export default function AllCategories() {
-  var [selectedIcon,selectIcon] = useState({icon:icons.at(2).icon,color:icons.at(2).backgroundColor})
+  var [selectedIcon,selectIcon] = useState({icon:icons.at(2).icon})
   var [userData,setUserData] = useState({email:'',firstName:'',secondName:'',image:'',gender:'',age:0})
    
 

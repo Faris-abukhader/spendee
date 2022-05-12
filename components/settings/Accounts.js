@@ -43,13 +43,14 @@ export default function Accounts() {
               </FloatingLabel>
             </div>
             <div className='col-6'>
-            <FloatingLabel
-            controlId="floatingInput"
-            label="Gender"
-            className="mb-3" >
-             <Form.Control type="text" placeholder="" />
-              </FloatingLabel>
-            </div>
+            <FloatingLabel controlId="floatingSelectGrid" label="Gender">
+      <Form.Select aria-label="Floating label select example">
+        <option>select your gender</option>
+        <option value="male">male</option>
+        <option value="female">female</option>
+      </Form.Select>
+    </FloatingLabel>           
+     </div>
             <div className='col-6'>
             <FloatingLabel
             controlId="floatingInput"

@@ -9,7 +9,7 @@ export default function ColorSelector(props) {
             <Popover.Body style={{ maxWidth: '60px', alignItems: 'center', maxHeight: '50vh', overflowY: 'auto' }}>
                 {icons.map((item, index) =>
                     <div key={index} style={{width:'100%'}} className='text-center mb-1'>
-                        <button onClick={() => { setShow(!show); props.selectIcon({ icon: item.icon, color: item.backgroundColor }) }} className='btn btn-light p-0' style={{ width: '34px', height: '34px', borderRadius: '50%', background: item.backgroundColor }}><img src={`/icons/categories/categories_icon/${item.icon}`} /></button>
+                        <button onClick={() => { setShow(!show); props.selectIcon({ icon: item.icon}) }} className='btn btn-light p-0' style={{ width: '34px', height: '34px', borderRadius: '50%'}}><img src={`/icons/categories/categories_icon/${item.icon}`} /></button>
                     </div>
                 )}
             </Popover.Body>

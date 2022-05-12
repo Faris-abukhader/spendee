@@ -15,16 +15,20 @@ export default function Nav() {
         <>
             <nav className="navbar navbar-expand-lg navbar-light" style={{ boxShadow: "0px 1px 5px rgba(128, 128, 128, 0.5)" }}>
                 <div className="container-fluid my-0 py-0" style={{ width: '100%' }}>
-                    <a className="navbar-brand" href="#">
+                    <Link href={`/`}>
+                    <a className="navbar-brand">
                         <img src="/Ahmed/Pictures/logo.png" width="200" height="45" />
                     </a>
+                    </Link>
                     <button className="navbar-toggler" type="button" onClick={toggleOffCanvas} >
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link active" aria-current="page" href="#"><strong>Transactions</strong></a>
+                                <Link href={`dashboard/transaction`}>
+                                <a className="nav-link active" aria-current="page"><strong>Transactions</strong></a>
+                                </Link>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="#"><strong>Budget</strong></a>

@@ -41,7 +41,7 @@ export default function Home({ session }) {
         </div>
         :
         <div style={{width:'100%'}} className='text-center'>
-            <img className='mb-2'  style={{opacity:'0.6'}} src='/icons/home/transfer_money.svg'/>
+            <img className='mb-2'  style={{opacity:'0.6'}} src='/icons/home/no_transaction.svg'/>
             <br/>
             <small style={{color:'#009DFF',opacity:'0.6'}}>You have no transactions yet</small>
         </div>
@@ -52,22 +52,22 @@ export default function Home({ session }) {
 }
 
 
-export const getServerSideProps = async (ctx) => {
-  const session = await getSession(ctx)
+// export const getServerSideProps = async (ctx) => {
+//   const session = await getSession(ctx)
 
-  if (session) {
-    return {
-      props: {
-        session
-      }
-    }
-  } else {
-    return {
-      redirect: {
-        destination: '/api/auth/signin'
-      },
-      props: {}
-    }
-  }
+//   if (session) {
+//     return {
+//       props: {
+//         session
+//       }
+//     }
+//   } else {
+//     return {
+//       redirect: {
+//         destination: '/api/auth/signin'
+//       },
+//       props: {}
+//     }
+//   }
 
-}
+// }
