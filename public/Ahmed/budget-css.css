@@ -1,0 +1,60 @@
+*{
+    box-sizing: border-box;
+}
+
+
+.menu .nav-item .nav-link{
+    color: #777777;
+    border-bottom: 2px solid white;
+    transition: 500ms;
+}
+
+.menu .nav-item .nav-link:not(.active):hover {
+    border-bottom: 2px solid #00A3FF;
+    color: #00A3FF;
+}
+
+.bottomMenu .nav-link{
+    color: #666666;
+    transition: 500ms;
+}
+
+.bottomMenu .nav-link:hover:not(.active){
+    color: #00A3FF;
+}
+
+@media only screen and (min-width: 768px) {
+    .report .list-group-item{
+        width:25%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .bottomMenu{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    #day-radio{
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 769px) {
+    #day-option{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .create-btn{
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .create-btn{
+        width: 400px;
+    }
+}
