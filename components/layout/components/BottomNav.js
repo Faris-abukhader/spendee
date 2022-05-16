@@ -1,8 +1,8 @@
 import Link from "next/link"
 export default function BottomNav() {
     return (
-        <nav class="bottomMenu navbar navbar-light justify-content-center fixed-bottom py-0 d-lg-none" style={{ backgroundColor: 'none' }}>
-            <ul class="navbar-nav list-group-horizontal mb-4 py-1" style={{ boxShadow: '2px 4px 8px 2px rgba(34,41,47,.12)!important', minWidth: '90%', background: 'white', borderRadius: '40px' }}>
+        <nav className="bottomMenu navbar navbar-light justify-content-center fixed-bottom py-0 d-lg-none" style={{ backgroundColor: 'none' }}>
+            <ul className="navbar-nav list-group-horizontal mb-4 py-1" style={{ boxShadow: '2px 4px 8px 2px rgba(34,41,47,.12)!important', minWidth: '90%', background: 'white', borderRadius: '10px' }}>
                 <div className='row align-items-center justify-content-center' style={{ width: '100%' }}>
                     <div className='col-8 text-center'>
                         <div className='row align-items-center justify-content-center'>
@@ -13,7 +13,7 @@ export default function BottomNav() {
                                 <small style={{fontSize:'0.7rem'}}>Transaction</small>
                             </div>
                             </Link>
-                            <Link href={`/dashboard/buget`}>
+                            <Link href={`/dashboard/budget`}>
                             <div className='col-4 btn p-0 m-0' style={{ color: 'rgb(0,157,255)' }}>
                                 <img src='/icons/nav/budget.svg' style={{ color: 'rgb(225,210,0)' }} />
                                 <br />

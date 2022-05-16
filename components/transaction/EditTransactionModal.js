@@ -1,19 +1,29 @@
 import { useState,useEffect } from 'react'
 import {Modal,FloatingLabel,Form} from 'react-bootstrap'
+import { useSelector } from 'react-redux'
 import TransactionCategorySelector from './transactionCategorySelector'
-export default function ({data,show,toggle}) {
-  var [transactionData,setTransactionData] = useState([])
+import axios from 'axios'
+import { modifyOneTransaction } from '../../store/slices/transactionSlice'
+import { useDispatch } from 'react-redux'
+export default function ({show,toggle,itemId}) {
+  const transaction = useSelector((state)=>state.transaction[0].transaction[0].filter((item)=>item.id==itemId)[0])
+  var [transactionData,setTransactionData] = useState({id:'',type:'',title:'',icon:'',categoryId:'',date:'',note:'',amount:0})
+  const dispatch = useDispatch()
 
+  const dispatchTransactionData = ()=>{
+    setTransactionData({id:transaction.id,type:transaction.type,title:transaction.title,icon:transaction.icon,categoryId:transaction.category,date:transaction.date,note:transaction.note,amount:transaction.amount})
+  }
 
   useEffect(()=>{
-   setTransactionData(data)
-  },[])
+    dispatchTransactionData()
+  },[show])
 
-
-  const  setTransactionTitleTypeAndIcon = (title,type,icon,backgroundColor)=>{
+  
+  const  setTransactionIdTitleTypeAndIcon = (id,title,type,icon)=>{
     setTransactionData((prevs)=>{
       return{
         ...prevs,
+        ['category']:id,
         ['title']:title,
         ['type']:type,
         ['icon']:icon
@@ -21,18 +31,28 @@ export default function ({data,show,toggle}) {
     })
   }
 
+
   const inputHandler = (event)=>{
     const {name,value} = event.target
     setTransactionData((prevs)=>{
       return{
         ...prevs,
-        [name]:value
+        [name]: name == 'amount' ? Number.parseInt(value):value
       }
     })
   }
 
-  function submit(){
-    // Todo . . .
+  async function submit(){
+
+
+    if(transactionData.type=='expense'){transactionData.amount *= -1 }
+    const request = await axios.put(`${process.env.API_URL}/transaction/${transactionData.id}`,transactionData)
+    const response = await request.data
+
+    if(response.state){
+      dispatch(modifyOneTransaction(transactionData))
+    }
+
     toggle()
     reset()
   }
@@ -51,7 +71,7 @@ export default function ({data,show,toggle}) {
         <Modal.Body>
           <div className='row align-items-center justify-content-center'>
           <div className='col-sm-12 col-md-6 col-lg-6'>
-          <TransactionCategorySelector icon={transactionData.icon} title={transactionData.title} setTransactionTypeAndIcon={setTransactionTitleTypeAndIcon}/>
+          <TransactionCategorySelector icon={transactionData.icon} title={transactionData.title}  itemId={itemId} setTransactionIdTitleTypeAndIcon={setTransactionIdTitleTypeAndIcon}/>
           </div>
             <div className='col-sm-12 col-md-6 col-lg-6'>
               <FloatingLabel

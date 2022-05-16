@@ -1,33 +1,53 @@
 import { useState ,useEffect} from 'react'
+import { getSession } from "next-auth/react"
 import { Modal, FloatingLabel,Form } from 'react-bootstrap'
 import TransactionCategorySelector from './transactionCategorySelector'
+import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { addNewTransaction, setTransaction } from '../../store/slices/transactionSlice'
 export default function addNewTransactionModal(props) {
 
-  let [transactionData,setTransactionData] = useState({title:'',icon:'',type:'',date:new Date(),note:'',amount:0})
-  let [disable,setDisable] = useState(true)
-  const  setTransactionTitleTypeAndIcon = (title,type,icon,backgroundColor)=>{
+  var [transactionData,setTransactionData] = useState({id:' ',type:' ',title:' ',icon:' ',categoryId:' ',date:new Date(),note:' ',amount:0})
+  var [disable,setDisable] = useState(true)
+  const dispatch = useDispatch()
+
+  const setUserId = ()=>{
     setTransactionData((prevs)=>{
       return{
         ...prevs,
-        ['title']:title,
-        ['type']:type,
-        ['icon']:icon
+        ['id']:props.id
       }
     })
   }
+  const  setTransactionIdTitleTypeAndIcon = (id,title,type,icon)=>{
+    setTransactionData((prevs)=>{
+      return{
+        ...prevs,
+        ['categoryId']:id,
+        ['icon']:icon,
+        ['title']:title,
+        ['type']:type
+      }
+    })
+  }
+
+
+  useEffect(()=>{
+    setUserId()
+  },[])
 
   const inputHandler = (event)=>{
     const {name,value} = event.target
     setTransactionData((prevs)=>{
       return{
         ...prevs,
-        [name]:value
+        [name]:name=='amount' ? Number.parseInt(value):value
       }
     })
   }
 
   function validator(){
-    if(transactionData.amount > 0 && transactionData.icon.length > 0 && transactionData.note.length > 0){
+    if(transactionData.amount > 0 && transactionData.categoryId.length > 0 && transactionData.note.length > 0){
       setDisable(false)
     }else{
       setDisable(true)
@@ -39,9 +59,16 @@ export default function addNewTransactionModal(props) {
   },[inputHandler])
 
 
-  function submit() {
-    // todo . . .
-    console.log(transactionData)
+  const  submit = async()=> {
+
+    const date = new Date(transactionData.date)
+    transactionData.date = date
+    const request = await axios.post(`${process.env.API_URL}/transaction`,transactionData)
+    const response = await request.data
+
+    if(response.state){
+      dispatch(setTransaction(transactionData))
+    }
     props.toggle()
     reset()
   }
@@ -49,6 +76,7 @@ export default function addNewTransactionModal(props) {
   function reset(){
     setTransactionData({title:'',icon:'',type:'',date:new Date(),note:'',amount:0})
   }
+
   return (
     <>
       <Modal centered show={props.show} onHide={props.toggle} style={{ border: 'none', boxShadow: '2px 4px 8px 2px rgba(34,41,47,.12)!important' }}>
@@ -58,7 +86,7 @@ export default function addNewTransactionModal(props) {
         <Modal.Body>
           <div className='row align-items-center justify-content-center'>
           <div className='col-sm-12 col-md-6 col-lg-6'>
-          <TransactionCategorySelector setTransactionTypeAndIcon={setTransactionTitleTypeAndIcon}/>
+            <TransactionCategorySelector  setTransactionIdTitleTypeAndIcon={setTransactionIdTitleTypeAndIcon}/>
           </div>
             <div className='col-sm-12 col-md-6 col-lg-6'>
               <FloatingLabel

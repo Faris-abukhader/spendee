@@ -9,7 +9,7 @@ export default function WalletCard({amount}) {
             <div className='col-9 text-start'>
                 <div>
                     <h4>Cash</h4>
-                    <div style={{color:amount>0?'green':'red'}}>{amount>0 ? '+':'-'}{amount} USD</div>
+                    <div style={{color:amount>=0?'green':'red'}}>{amount} USD</div>
                 </div>
             </div>
         </div>

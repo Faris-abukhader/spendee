@@ -1,13 +1,24 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import EditTransactionModal from './EditTransactionModal'
 import Swal from 'sweetalert2'
-
-export default function TransactionListItem({ data }) {
+import axios from 'axios'
+import { useSelector ,useDispatch } from 'react-redux'
+import { deleteOneTransaction } from '../../store/slices/transactionSlice'
+export default function TransactionListItem({ data,itemId }) {
   let [showEditModal,setShowEditModal] = useState(false)
+  const dispatch = useDispatch()
+
+  const userId = useSelector((state)=>state.user.id)
+  const [transaction,setTransaction] = useState({})
+  
+  useEffect(()=>{
+    setTransaction(data)
+  },)
 
   const modalToggle = ()=>{
     setShowEditModal(!showEditModal)
   }
+
 
   const showDeleteDialog = ()=>{
     Swal.fire({
@@ -19,31 +30,33 @@ export default function TransactionListItem({ data }) {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Confirm'
     }).then((result) => {
-       
-      // Todo . . . 
-      
-        if (result.isConfirmed) {
+
+      if (result.isConfirmed) {    
+        axios.delete(`${process.env.API_URL}/transaction/${transaction.id}`,{userId:transaction.userId},{headers:{token:userId}})
+        .then((response)=>{
+          dispatch(deleteOneTransaction(transaction.id))
           Swal.fire({
             title:'Deleted!',
             text:'Your Transaction has been deleted.',
             icon:'success',
             confirmButtonColor:'#28a745'
           })
-        }  else{
+        }).catch((err)=>{
           Swal.fire({
-            title:'Cancelled',
-            text:'Your imaginary file is safe :)',
+            title:'Error',
+            text:'Something went wrong , try again later.',
             icon:'error',
             confirmButtonColor:'#dc3545',
             confirmButtonText:'Close'
           })
-        }
+         })
+       }  
     })
   }
   return (
     <>
       <div className='p-2'>
-        <div className='py-2'>{data.createAt}</div>
+        <div className='py-2'>{transaction.createAt}</div>
         <div className='row align-items-center justify-content-center'>
           <div className='col-2'>
             <img src={`/icons/categories/categories_icon/${data.icon}`} style={{ borderRadius: '50%' }} />
@@ -70,7 +83,7 @@ export default function TransactionListItem({ data }) {
         </div>
       </div>
       <hr class="dropdown-divider my-2" style={{ maxWidth: '90%', margin: '0 auto' }}></hr>
-      <EditTransactionModal show={showEditModal} toggle={modalToggle} data={data} />
+      <EditTransactionModal show={showEditModal} toggle={modalToggle} itemId={itemId} />
     </>
   )
 }

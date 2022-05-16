@@ -1,29 +1,35 @@
 import { useState,useEffect, useRef } from 'react'
-import { OverlayTrigger, Popover,FloatingLabel,Button } from 'react-bootstrap';
-import categoriesList from '../../public/icons/categories/categoriesList.json'
+import { OverlayTrigger, Popover,Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 export default function TransactionCategorySelector(props) {
     const [show, setShow] = useState(false);
     const target = useRef(null);
 
     var [isExpense,setExpense] = useState(true)
-    var [pickedCategory,selectCategory] = useState({title:'',icon:''})
+    var [pickedCategory,selectCategory] = useState({id:'',title:'',icon:''})
+    const categories = useSelector((state)=>state.transactionCategory[0].transactionCategory[0])
+
 
     useEffect(()=>{
         selectCategory({title:props.title ? props.title:'',icon:props.icon ? props.icon:''})
     },[])
 
 
+
     const dispatchExpense = ()=>{setExpense(true)}
     const dispatchIncome = ()=>{setExpense(false)}
-    const assignTarget = (title,icon) =>{selectCategory({title:title,icon:icon})}
+    const assignTarget = (id,title,type,icon) =>{
+        selectCategory({id:id,title:title,icon:icon})
+        props.setTransactionIdTitleTypeAndIcon(id,title,type,icon)
+    }
 
 
     const expenseCategoryList = (
-      categoriesList.filter((item)=>item.type=='expense').map((category)=><><button onClick={()=>{assignTarget(category.title,category.icon);props.setTransactionTypeAndIcon(category.title,category.type,category.icon);setShow(false)}} className='btn btn-light p-0' style={{background:'none'}}><img src={`/icons/categories/categories_icon/${category.icon}`} style={{borderRadius:'50%'}}/> <span>{category.title}</span></button><br/><br/></>)
+      categories &&  categories.filter((item)=>item.type=='expense').map((category)=><><button onClick={()=>{assignTarget(category.id,category.title,category.type,category.icon);setShow(false)}} className='btn btn-light p-0' style={{background:'none',border:'none'}}><img src={`/icons/categories/categories_icon/${category.icon}`} style={{borderRadius:'50%'}}/> <span>{category.title}</span></button><br/><br/></>)
     )
 
     const incomeCategoryList = (
-        categoriesList.filter((item)=>item.type=='income').map((category)=><><button onClick={()=>{assignTarget(category.title,category.icon);props.setTransactionTypeAndIcon(category.title,category.type,category.icon);setShow(false)}} className='btn btn-light p-0' style={{background:'none'}}><img src={`/icons/categories/categories_icon/${category.icon}`} style={{borderRadius:'50%'}}/> <span>{category.title}</span></button><br/><br/></>)
+      categories  &&  categories.filter((item)=>item.type=='income').map((category)=><><button onClick={()=>{assignTarget(category.id,category.title,category.icon,category.icon);setShow(false)}} className='btn btn-light p-0' style={{background:'none',border:'none'}}><img src={`/icons/categories/categories_icon/${category.icon}`} style={{borderRadius:'50%'}}/> <span>{category.title}</span></button><br/><br/></>)
     )
     
 

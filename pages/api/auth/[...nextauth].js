@@ -55,16 +55,13 @@ export default NextAuth({
         if (user.user) {
           // return user.user
           return{
-            email:user.user.email,
+            email:user.user.email +','+user.user.id,
             name:user.user.firstName+' '+user.user.secondName,
             image:user.user.image
           }
         }
-
         // Return null if user data could not be retrieved
         return null;
-
-
       },
     }),
   ],
@@ -79,10 +76,6 @@ export default NextAuth({
           return token
         },
         session:async({session,token,user})=>{
-          // if(token){
-          //   session.id = token.id
-          // }
-          // return session
           if(user){
             session.user = user
           }
@@ -91,16 +84,9 @@ export default NextAuth({
           }
 
           if(newUserData){
-            console.log('got data from event')
             session.user = newUserData
           }
-
-
-          console.log('from sesion ')
-          console.log(session)
           return session
-
-
         },
         jwt:async({token,user,account,profile})=>{
           if(account){

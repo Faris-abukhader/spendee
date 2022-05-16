@@ -3,10 +3,9 @@ import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import "bootstrap/dist/css/bootstrap.css";
 import moment from "moment";
-
 export default function myDateRangePicker() {
-  const [fromDate, setFromDate] = useState(new Date());
-  const [toDate, setToDate] = useState(new Date());
+  let [fromDate, setFromDate] = useState(new Date());
+  let [toDate, setToDate] = useState(new Date());
 
   const range = {
     Today: [moment(), moment()],
@@ -32,26 +31,60 @@ export default function myDateRangePicker() {
     ]
   };
 
+
+    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+  const dateDiffInDays = (a, b)=> {
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+  }
+  
+  var diffDatys = dateDiffInDays(new Date(fromDate),new Date(toDate)) ;
+
+
   const handleEvent = (event, picker) => {
-    console.log(typeof picker)
-    console.log("start: ", picker.startDate._d);
-    console.log("end: ", picker.endDate._d);
     setFromDate(picker.startDate._d.toISOString());
     setToDate(picker.endDate._d.toISOString());
+    diffDatys = dateDiffInDays(new Date(fromDate),new Date(toDate)) ;
   };
 
+
+const addDays = (date, days)=> {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+const subtractDays = (date, days)=> {
+  var result = new Date(date);
+  result.setDate(result.getDate() - days);
+  return result;
+}
+
+
   const next = ()=>{
-
+    let tempFromDate = new Date(fromDate)
+    let tempToDate = new Date(toDate)
+    tempFromDate = addDays(tempFromDate,diffDatys)
+    tempToDate = addDays(tempToDate,diffDatys)
+    setFromDate(tempFromDate)
+    setToDate(tempToDate)
   }
-  const previous = ()=>{
 
+  const previous = ()=>{
+    let tempFromDate = new Date(fromDate)
+    let tempToDate = new Date(toDate)
+    tempFromDate = subtractDays(tempFromDate,diffDatys)
+    tempToDate = subtractDays(tempToDate,diffDatys)
+    setFromDate(tempFromDate)
+    setToDate(tempToDate)
   }
 
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-        <button className="btn bt-light" style={{ background: 'white' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'end' }}>
+        <button onClick={previous}  className="btn bt-light" style={{ background: 'white' }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
           </svg>
@@ -71,7 +104,7 @@ export default function myDateRangePicker() {
             </div>
           </DateRangePicker>
         </div>
-        <button className="btn bt-light" style={{background: 'white' }}>
+        <button onClick={next} className="btn bt-light" style={{background: 'white' }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
           </svg>

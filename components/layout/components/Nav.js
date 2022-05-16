@@ -3,10 +3,10 @@ import OffCanvas from './OffCanvas'
 import { Dropdown, ButtonGroup } from 'react-bootstrap'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
-import { useSession } from 'next-auth/react'
+import { useSelector } from 'react-redux'
 export default function Nav() {
-    const { data: session, status } = useSession()
     var [showOffCanvas, setShowOffCanvas] = useState(false)
+    const user = useSelector((state)=>state.user[0].user[0])
 
     function toggleOffCanvas() {
         setShowOffCanvas(!showOffCanvas)
@@ -26,22 +26,26 @@ export default function Nav() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <Link href={`dashboard/transaction`}>
+                                <Link href={`/dashboard/transaction`}>
                                 <a className="nav-link active" aria-current="page"><strong>Transactions</strong></a>
                                 </Link>
                             </li>
                             <li className="nav-item">
+                                <Link  href={`/dashboard/budget`}>
                                 <a className="nav-link" href="#"><strong>Budget</strong></a>
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#"><strong>Wallet</strong></a>
+                               <Link href={`/dashboard/settings`}>
+                                <a className="nav-link" href="#"><strong>Settings</strong></a>
+                                </Link>
                             </li>
                         </ul>
                         <div className="dropdown ms-auto">
                             <Dropdown as={ButtonGroup}>
                                 <butt className='btn btn-light' style={{ border:'none',background: 'none' }}>
-                                    <img class="img-fluid mx-2" src={`/icons/nav/user.svg`} alt="user_icon" style={{ borderRadius: '50%' }} />
-                                    <span>{session && session.user.name}</span>
+                                    <img className="img-fluid mx-2" src={user.image ? user.image:`/icons/nav/user.svg`} alt="user_icon" style={{ borderRadius: '50%',width:'40px',height:'40px' }} />
+                                    <span>{user.username}</span>
                                 </butt>
                                 <Dropdown.Toggle split variant="light" id="dropdown-split-basic" style={{ border:'none',background: 'none' }} />
                                 <Dropdown.Menu>

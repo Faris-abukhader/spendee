@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { getSession, useSession } from "next-auth/react"
+import { getSession } from "next-auth/react"
 import Head from 'next/head'
 import ClientLayout from '../components/layout/Client'
 import WalletCard from '../components/home/WalletCard'
@@ -7,9 +7,22 @@ import OverviewCard from '../components/home/OverviewCards'
 import DateRangePicker from '../components/home/DateRangePicker'
 import DoughnutChart from '../components/charts/DoughnutChart'
 import LineChart from '../components/charts/LineChart'
-export default function Home({ session }) {
+import { wrapper } from '../store/store'
+import {setUser} from '../store/slices/userSlice'
+import {setTransaction} from '../store/slices/transactionSlice'
+import { useSelector } from 'react-redux'
+export default function Home() {
+  var [transactionAmount ,setTransactionAmount] = useState(0)
+  const transactions = useSelector((state)=>state.transaction[0].transaction[0])
+  var transactionAmount = 0
+  transactions.map((item)=>{
+    if(item.type=='expense'){
+      transactionAmount-=item.amount
+    }else{
+      transactionAmount+=item.amount
+    }
+  })
 
-  var [hasData,setData] = useState(false)
 
   return (
     <ClientLayout>
@@ -21,16 +34,17 @@ export default function Home({ session }) {
         </Head>
         <h3>Wallets</h3>
         <div className='ps-3'>
-          <WalletCard amount={3000} />
+          <WalletCard amount={transactionAmount} />
         </div>
-        <div style={{ marginTop: '50px' }} className='row align-items-between justify-content-center pt-4'>
-          <h3 className=' col-lg-6 col-md-6 col-sm-12 mb-4' style={{ marginRight: 'auto' }}>Overview</h3>
-          <div className='col-lg-6 col-md-6 col-sm-12'>
-            <DateRangePicker />
-          </div>
-        </div>
-        <OverviewCard />
-        {hasData ?  
+        {transactions ? 
+        <>
+                <div style={{ marginTop: '50px' }} className='row align-items-between justify-content-center pt-4 px-0'>
+                <h3 className=' col-lg-6 col-md-6 col-sm-6 col-xs-12 mb-4' style={{ marginRight: 'auto' }}>Overview</h3>
+                <div className='col-lg-6 col-md-6 col-sm-6 col-xs-12'>
+                  <DateRangePicker />
+                </div>
+              </div>
+              <OverviewCard />
         <div className='row'>
           <div className='col-lg-6 col-md-6 col-sm-12'>
             <DoughnutChart />
@@ -39,6 +53,7 @@ export default function Home({ session }) {
             <LineChart />
           </div>
         </div>
+        </>
         :
         <div style={{width:'100%'}} className='text-center'>
             <img className='mb-2'  style={{opacity:'0.6'}} src='/icons/home/no_transaction.svg'/>
@@ -52,22 +67,43 @@ export default function Home({ session }) {
 }
 
 
-// export const getServerSideProps = async (ctx) => {
-//   const session = await getSession(ctx)
+export const getServerSideProps = wrapper.getServerSideProps(store=>async(ctx)=>{
+  const session = await getSession(ctx)
 
-//   if (session) {
-//     return {
-//       props: {
-//         session
-//       }
-//     }
-//   } else {
-//     return {
-//       redirect: {
-//         destination: '/api/auth/signin'
-//       },
-//       props: {}
-//     }
-//   }
+  if (session) {
+    const dataList = session.user.email.split(',')
+    const id = dataList[1]
+    const data = await fetch(`${process.env.API_URL}/user/${id}`,{
+      method:"GET",
+      headers:{
+        token:id
+      }
+    })
 
-// }
+    const user = await data.json()  
+
+    if(user){
+      const userInfo = {username:user.firstName+' '+user.secondName,id:user.id,email:user.email,image:user.image,age:user.age}
+      store.dispatch(setUser(userInfo))
+      store.dispatch(setTransaction(user.transactions))
+      // store.dispatch(setTransactionCategory(user.transactionCategories))
+      // store.dispatch(setBudget(user.budgets))
+      }
+      
+
+
+    return {
+      props: {
+        session,
+      }
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/api/auth/signin'
+      },
+      props: {}
+    }
+  }
+
+}) 

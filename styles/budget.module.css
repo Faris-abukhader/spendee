@@ -1,0 +1,10 @@
+.btn{
+    margin-left:'10px';
+    background:#f8f9fa;
+    border:none;
+    padding:0px;
+    padding-right:15px ;
+    padding-left:15px;
+    border-radius:20px;
+    box-shadow:1px 1px 0px 0px rgba(34,41,47,.12)!important
+}
