@@ -3,10 +3,11 @@ import { getSession } from "next-auth/react"
 import { Modal, FloatingLabel,Form } from 'react-bootstrap'
 import TransactionCategorySelector from './transactionCategorySelector'
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addNewTransaction, setTransaction } from '../../store/slices/transactionSlice'
 export default function addNewTransactionModal(props) {
 
+  const userId = useSelector(state=>state.user.id)
   var [transactionData,setTransactionData] = useState({id:' ',type:' ',title:' ',icon:' ',categoryId:' ',date:new Date(),note:' ',amount:0})
   var [disable,setDisable] = useState(true)
   const dispatch = useDispatch()
@@ -15,7 +16,7 @@ export default function addNewTransactionModal(props) {
     setTransactionData((prevs)=>{
       return{
         ...prevs,
-        ['id']:props.id
+        ['id']:userId
       }
     })
   }
@@ -37,13 +38,18 @@ export default function addNewTransactionModal(props) {
   },[])
 
   const inputHandler = (event)=>{
-    const {name,value} = event.target
-    setTransactionData((prevs)=>{
-      return{
-        ...prevs,
-        [name]:name=='amount' ? Number.parseInt(value):value
-      }
-    })
+    let {name,value} = event.target
+
+    if(name==='date'){
+      value = new Date(value)
+    }
+
+      setTransactionData((prevs)=>{
+        return{
+          ...prevs,
+          [name]:name==='amount' ? Number.parseInt(value):value
+        }
+      })  
   }
 
   function validator(){
@@ -60,17 +66,16 @@ export default function addNewTransactionModal(props) {
 
 
   const  submit = async()=> {
-
-    const date = new Date(transactionData.date)
-    transactionData.date = date
+    
     const request = await axios.post(`${process.env.API_URL}/transaction`,transactionData)
     const response = await request.data
 
     if(response.state){
-      dispatch(setTransaction(transactionData))
+      // dispatch(setTransaction(transactionData))
+      dispatch(addNewTransaction(transactionData))
+      reset()
     }
     props.toggle()
-    reset()
   }
 
   function reset(){

@@ -22,7 +22,7 @@ export default function Support() {
       <legend>Support</legend>
     <div className='px-3 mt-3'>
       <div className='row align-items-center justify-content-center'>
-      {data.map((item)=><div className='col-lg-6 col-md-6 col-sm-12 col-sm-112 '><SupportCard {...item} /></div>)}
+      {data.map((item)=><div key={item.id} className='col-lg-6 col-md-6 col-sm-12 col-sm-112 '><SupportCard {...item} /></div>)}
       </div>       
     </div>
     </fieldset>

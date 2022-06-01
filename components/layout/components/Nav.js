@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useSelector } from 'react-redux'
 export default function Nav() {
     var [showOffCanvas, setShowOffCanvas] = useState(false)
-    const user = useSelector((state)=>state.user[0].user[0])
+    const user = useSelector((state)=>state.user)
 
     function toggleOffCanvas() {
         setShowOffCanvas(!showOffCanvas)
@@ -43,10 +43,10 @@ export default function Nav() {
                         </ul>
                         <div className="dropdown ms-auto">
                             <Dropdown as={ButtonGroup}>
-                                <butt className='btn btn-light' style={{ border:'none',background: 'none' }}>
+                                <button className='btn btn-light' style={{ border:'none',background: 'none' }}>
                                     <img className="img-fluid mx-2" src={user.image ? user.image:`/icons/nav/user.svg`} alt="user_icon" style={{ borderRadius: '50%',width:'40px',height:'40px' }} />
                                     <span>{user.username}</span>
-                                </butt>
+                                </button>
                                 <Dropdown.Toggle split variant="light" id="dropdown-split-basic" style={{ border:'none',background: 'none' }} />
                                 <Dropdown.Menu>
                                     <Dropdown.Item href="/dashboard/settings?option=1">Settings</Dropdown.Item>

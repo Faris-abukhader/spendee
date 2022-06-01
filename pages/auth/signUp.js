@@ -219,7 +219,7 @@ export default function signUp({apiEndpoint}) {
               <button className='btn btn-light col-4 m-2' style={{background:'rgb(8,105,251)',color:'white'}} disabled={disable} onClick={submit}>Sign up</button>
               <button className='btn btn-outline-warning col-4 m-2' style={{color:'black'}} onClick={reset}>Reset</button>
             </div>
-            {alert && <div class="alert alert-success text-center" role="alert">We've sent a link to your email address: <b>{newUser.email}</b> Please follow the link inside to continue</div>}
+            {alert && <div className="alert alert-success text-center" role="alert">We've sent a link to your email address: <b>{newUser.email}</b> Please follow the link inside to continue</div>}
           </div>
         </div>
         </div>

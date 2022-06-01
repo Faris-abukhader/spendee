@@ -9,7 +9,6 @@ Tooltip,
 Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-
 ChartJS.register(
 CategoryScale,
 LinearScale,
@@ -19,10 +18,27 @@ Title,
 Tooltip,
 Legend
 );
+import {useSelector} from 'react-redux'
 
   export default function PolarChart() {
+    console.log('2022-05-15T00:00:00.000Z'.substring(8,10))
     //   var [data,setData] = useState({labels:['Red','Green','Custom'],datasets:[{data:[5,4,3],backgroundColor:['#7944d0','green','gray']}]})
-     const options = {
+    const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const transactionMonths = [];
+    const transactions = useSelector(state=>state.transaction.map((item)=>{
+      // console.log((Number.parseInt(item.date.toString().substring(8,10))-1))
+      // console.log(monthArray[(Number.parseInt(item.date.toString().substring(8,10))-1)])
+      // transactionMonths.push(monthArray[item.date.toString().substring(8,10)-1])
+      if(item.type=='income'){
+        return item.amount
+      }else{
+        return -item.amount
+      }
+    }))
+
+    // console.log(transactions)
+    
+    const options = {
       responsive: true,
       plugins: {
         legend: {
@@ -34,15 +50,15 @@ Legend
         },
       },
     };
-    
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
+    console.log(transactionMonths)
+//     const array = [];
+// mySet.forEach(v => array.push(v));
    const data = {
-    labels,
+    monthArray,
     datasets: [
       {
         label: 'Transaction',
-        data: [23,65,89,76,3,5,7,9,9,8],
+        data: transactions,
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       }

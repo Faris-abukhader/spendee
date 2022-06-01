@@ -1,4 +1,4 @@
-import { useState,useEffect, useRef } from 'react'
+import { useState,useEffect, useRef, Fragment } from 'react'
 import { OverlayTrigger, Popover,Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 export default function TransactionCategorySelector(props) {
@@ -7,7 +7,7 @@ export default function TransactionCategorySelector(props) {
 
     var [isExpense,setExpense] = useState(true)
     var [pickedCategory,selectCategory] = useState({id:'',title:'',icon:''})
-    const categories = useSelector((state)=>state.transactionCategory[0].transactionCategory[0])
+    const categories = useSelector((state)=>state.transactionCategory[0])
 
 
     useEffect(()=>{
@@ -25,11 +25,11 @@ export default function TransactionCategorySelector(props) {
 
 
     const expenseCategoryList = (
-      categories &&  categories.filter((item)=>item.type=='expense').map((category)=><><button onClick={()=>{assignTarget(category.id,category.title,category.type,category.icon);setShow(false)}} className='btn btn-light p-0' style={{background:'none',border:'none'}}><img src={`/icons/categories/categories_icon/${category.icon}`} style={{borderRadius:'50%'}}/> <span>{category.title}</span></button><br/><br/></>)
+      categories &&  categories.filter((item)=>item.type=='expense').map((category)=><Fragment key={category.id}><button onClick={()=>{assignTarget(category.id,category.title,category.type,category.icon);setShow(false)}} className='btn btn-light p-0' style={{background:'none',border:'none'}}><img src={`/icons/categories/categories_icon/${category.icon}`} style={{borderRadius:'50%'}}/> <span>{category.title}</span></button><br/><br/></Fragment>)
     )
 
     const incomeCategoryList = (
-      categories  &&  categories.filter((item)=>item.type=='income').map((category)=><><button onClick={()=>{assignTarget(category.id,category.title,category.icon,category.icon);setShow(false)}} className='btn btn-light p-0' style={{background:'none',border:'none'}}><img src={`/icons/categories/categories_icon/${category.icon}`} style={{borderRadius:'50%'}}/> <span>{category.title}</span></button><br/><br/></>)
+      categories  &&  categories.filter((item)=>item.type=='income').map((category)=><Fragment key={category.id}><button onClick={()=>{assignTarget(category.id,category.title,category.type,category.icon);setShow(false)}} className='btn btn-light p-0' style={{background:'none',border:'none'}}><img src={`/icons/categories/categories_icon/${category.icon}`} style={{borderRadius:'50%'}}/> <span>{category.title}</span></button><br/><br/></Fragment>)
     )
     
 

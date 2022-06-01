@@ -3,15 +3,13 @@ import { Modal, FloatingLabel, Form } from 'react-bootstrap'
 import styles from '../../styles/budget.module.css'
 import BudgetCategoriesSelector from './BudgetCategoriesSelector'
 export default function addNewBudgetModal(props) {
-    let [budgetData, setBudgetData] = useState({ title: '', targetCategories: '', recurrence: 'once', note: '', amount: 0 })
+    let [budgetData, setBudgetData] = useState({ title: '', targetCategories: [],startDate:new Date(),endDate: new Date(), note: '', amount: 0 })
     let [disable, setDisable] = useState(true)
-    const setTransactionTitleTypeAndIcon = (title, type, icon, backgroundColor) => {
+    const setTransactionCategories = (categories) => {
         setBudgetData((prevs) => {
             return {
                 ...prevs,
-                ['title']: title,
-                ['type']: type,
-                ['icon']: icon
+                ['targetCategories']: [...categories],
             }
         })
     }
@@ -75,24 +73,13 @@ export default function addNewBudgetModal(props) {
                             </FloatingLabel>
                         </div>
                         <div className='col-sm-12 col-md-6 col-lg-6'>
-                            <div className='my-3' style={{ fontSize: '1rem' }}><img className='me-2' src='/icons/budget/filter.svg' />Budget Period</div>
-                            <small style={{ color: 'rgb(0,0,0,0.7)' }}>recurrence</small>
+                            <div className='my-3' style={{ fontSize: '1rem' }}><img className='me-2' src='/icons/budget/filter.svg' />Budget Category</div>
+                            <small style={{ color: 'rgb(0,0,0,0.7)' }}>category</small>
                             <div className='py-3' style={{ width: '100%', display: 'flex', flexDirection: 'row', alignContent: 'center', justifyContent: 'start', overflowY: 'auto' }}>
-                                <BudgetCategoriesSelector />
+                                <BudgetCategoriesSelector setTransactionCategories={setTransactionCategories} />
                             </div>
                         </div>
                         <div className='col-sm-12 col-md-6 col-lg-6'>
-                        </div>
-                        <div className='col-sm-12 col-md-12 col-lg-12'>
-                            <div className='my-3' style={{ fontSize: '1rem' }}><img className='me-2' src='/icons/budget/period.svg' />Budget Period</div>
-                            <small style={{ color: 'rgb(0,0,0,0.7)' }}>recurrence</small>
-                            <div className='py-3' style={{ width: '100%', display: 'flex', flexDirection: 'row', alignContent: 'center', justifyContent: 'start', overflowY: 'auto' }}>
-                                <button onClick={inputHandler} name={`recurrence`} value={`once`} className={styles.btn} style={{ background: budgetData.recurrence == 'once' ? '#18b272' : '#f8f9fa' }}>Once</button>
-                                <button onClick={inputHandler} name={`recurrence`} value={`daily`} className={styles.btn} style={{ background: budgetData.recurrence == 'daily' ? '#18b272' : '#f8f9fa' }}>Daily</button>
-                                <button onClick={inputHandler} name={`recurrence`} value={`weekly`} className={styles.btn} style={{ background: budgetData.recurrence == 'weekly' ? '#18b272' : '#f8f9fa' }}>Weekly</button>
-                                <button onClick={inputHandler} name={`recurrence`} value={`monthly`} className={styles.btn} style={{ background: budgetData.recurrence == 'monthly' ? '#18b272' : '#f8f9fa' }}>Monthly</button>
-                                <button onClick={inputHandler} name={`recurrence`} value={`yearly`} className={styles.btn} style={{ background: budgetData.recurrence == 'yearly' ? '#18b272' : '#f8f9fa' }}>Yearly</button>
-                            </div>
                         </div>
                         <div className='col-sm-12 col-md-6 col-lg-6'>
                             <FloatingLabel
@@ -100,10 +87,17 @@ export default function addNewBudgetModal(props) {
                                 label="Start date"
                                 className="mb-3"
                             >
-                                <Form.Control type={`date`} name='date' value={budgetData.date} onChange={inputHandler} />
+                                <Form.Control type={`date`} name='startDate' value={budgetData.startDate} onChange={inputHandler} />
                             </FloatingLabel>
                         </div>
                         <div className='col-sm-12 col-md-6 col-lg-6'>
+                        <FloatingLabel
+                                controlId="floatingInput"
+                                label="End date"
+                                className="mb-3"
+                            >
+                                <Form.Control type={`date`} name='endDate' value={budgetData.endDate} onChange={inputHandler} />
+                            </FloatingLabel>
                         </div>
                     </div>
 

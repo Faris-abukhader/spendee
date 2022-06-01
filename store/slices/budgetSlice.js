@@ -18,11 +18,14 @@ export const budgetSlice = createSlice({
         state = state.map((item)=>{if(item.id==payload.id){item = payload}})
     },
   },
-  // extraReducers:{
-  //  [HYDRATE]: (state,{payload}) =>{
-  //       state = state.budgets.push(payload)
-  //  }
-  // },
+  extraReducers:{
+   [HYDRATE]: (state,{payload}) =>{
+    //  console.log('from budget')
+    //  console.log(payload)
+     return [...payload.budget]
+        // state = state.budgets.push(payload)
+   }
+  },
 })
 
 export const { setBudget, addingNewBudget, deleteOneBudget,modifyOneBudget } = budgetSlice.actions

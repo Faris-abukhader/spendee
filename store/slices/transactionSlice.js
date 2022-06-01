@@ -3,42 +3,36 @@ import { HYDRATE } from 'next-redux-wrapper'
 
 const initialState = []
 export const transactionSlice = createSlice({
-  name: 'transactions',
+  name: 'transaction',
   initialState,
   reducers: {
     setTransaction: (state,{payload}) =>{
-      console.log('hello from setTransaction')
+      console.log('from setTransaction')
       console.log(payload)
-      state.push(payload)
+      if(payload !== undefined){
+        return [...payload]
+      }
+      return state
     }, 
     addNewTransaction: (state,{payload}) =>{
         state.push(payload)
     }, 
     deleteOneTransaction: (state,{payload}) =>{
-        state = state.filter((item)=>item.id!=payload)
+      return state.filter((item)=>item.id!=payload)
     },
     modifyOneTransaction: (state,{payload}) =>{
-      console.log('modifyOneTransaction was called')
-        state.map((item)=>{
+       return  state.map((item)=>{
           if(item.id != payload.id){
             return item
           }
-          
-          console.log('^^^^^^^^^^^^^^^^^^^^^^^FOUND IT^^^^^^^^^^^^^^^^^^^^^^^')
-          return {
-             payload
-          }
+          return payload
         })
     },
   },
   extraReducers:{
-   [HYDRATE]: (state,{payload,type}) =>{
-     console.log('from extraReducers : '+type)
-      state.push(payload)
+   [HYDRATE]: (state,{payload}) =>{
+      return [...payload.transaction]
    },
-  //  [HYDRATE]:(state,{payload}) =>{
-  //   state.push(payload)
-  //  },   
   },
 })
 

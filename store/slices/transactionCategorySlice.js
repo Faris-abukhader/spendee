@@ -20,7 +20,8 @@ export const transactionCategorySlice = createSlice({
   },
   extraReducers:{
    [HYDRATE]: (state,{payload}) =>{
-        state = state.push(payload)
+     return [...payload.transactionCategory]
+        // state = state.push(payload)
    }
   },
 })

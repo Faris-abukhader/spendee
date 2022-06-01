@@ -10,10 +10,12 @@ import LineChart from '../components/charts/LineChart'
 import { wrapper } from '../store/store'
 import {setUser} from '../store/slices/userSlice'
 import {setTransaction} from '../store/slices/transactionSlice'
+import { setTransactionCategory } from '../store/slices/transactionCategorySlice'
 import { useSelector } from 'react-redux'
+import axios from 'axios'
 export default function Home() {
   var [transactionAmount ,setTransactionAmount] = useState(0)
-  const transactions = useSelector((state)=>state.transaction[0].transaction[0])
+  const transactions = useSelector((state)=>state.transaction)
   var transactionAmount = 0
   transactions.map((item)=>{
     if(item.type=='expense'){
@@ -73,28 +75,33 @@ export const getServerSideProps = wrapper.getServerSideProps(store=>async(ctx)=>
   if (session) {
     const dataList = session.user.email.split(',')
     const id = dataList[1]
-    const data = await fetch(`${process.env.API_URL}/user/${id}`,{
+
+
+    const data =  await axios.get(`${process.env.API_URL}/user/${id}`,{
       method:"GET",
       headers:{
         token:id
       }
     })
 
-    const user = await data.json()  
+    const user = await data.data;
 
-    if(user){
-      const userInfo = {username:user.firstName+' '+user.secondName,id:user.id,email:user.email,image:user.image,age:user.age}
-      store.dispatch(setUser(userInfo))
-      store.dispatch(setTransaction(user.transactions))
-      // store.dispatch(setTransactionCategory(user.transactionCategories))
-      // store.dispatch(setBudget(user.budgets))
-      }
-      
-
+    console.log(user)
+    
+    if(user.state){
+        const userInfo = {username:user.data.firstName+' '+user.data.secondName,id:user.data.id,email:user.data.email,image:user.data.image,age:user.data.age}
+        store.dispatch(setUser(userInfo))
+        if(user.transactions!== undefined){
+          store.dispatch(setTransaction(user.data.transactions))
+        }
+        store.dispatch(setTransactionCategory(user.data.transactionCategories))
+        // store.dispatch(setBudget(user.budgets))
+        
+    }
 
     return {
       props: {
-        session,
+       session
       }
     }
   } else {
