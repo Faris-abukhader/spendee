@@ -6,10 +6,13 @@ export const budgetSlice = createSlice({
   initialState,
   reducers: {
     setBudget:(state,{payload})=>{
-      state.push(payload)
+      if(payload !== undefined){
+        return [...payload]
+      }
+      return state
     },
     addingNewBudget: (state,{payload}) =>{
-        state.push(payload)
+      state.push(payload)
     }, 
     deleteOneBudget: (state,{payload}) =>{
         state = state.filter((item)=>item.id!=payload)
@@ -20,10 +23,7 @@ export const budgetSlice = createSlice({
   },
   extraReducers:{
    [HYDRATE]: (state,{payload}) =>{
-    //  console.log('from budget')
-    //  console.log(payload)
      return [...payload.budget]
-        // state = state.budgets.push(payload)
    }
   },
 })

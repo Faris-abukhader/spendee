@@ -91,7 +91,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store=>async(ctx)=>
     if(user.state){
         const userInfo = {username:user.data.firstName+' '+user.data.secondName,id:user.data.id,email:user.data.email,image:user.data.image,age:user.data.age}
         store.dispatch(setUser(userInfo))
-        if(user.transactions!== undefined){
+        if(user.data.transactions!== undefined){
           store.dispatch(setTransaction(user.data.transactions))
         }
         store.dispatch(setTransactionCategory(user.data.transactionCategories))

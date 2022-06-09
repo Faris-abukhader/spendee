@@ -1,31 +1,48 @@
 import { useState, useEffect } from 'react'
 import { Modal, FloatingLabel, Form } from 'react-bootstrap'
-import styles from '../../styles/budget.module.css'
 import BudgetCategoriesSelector from './BudgetCategoriesSelector'
+import axios from 'axios'
+import { useSelector,useDispatch } from 'react-redux'
+import { addingNewBudget } from '../../store/slices/budgetSlice'
 export default function addNewBudgetModal(props) {
-    let [budgetData, setBudgetData] = useState({ title: '', targetCategories: [],startDate:new Date(),endDate: new Date(), note: '', amount: 0 })
+    let [budgetData, setBudgetData] = useState({userId:'', title: '', targetCategories: [],startedDate:new Date(),endDate: new Date(), amount: 0 })
     let [disable, setDisable] = useState(true)
+    const dispatch = useDispatch()
+    const userId = useSelector(state=>state.user.id)
+
+    const setUserId = ()=>{
+        setBudgetData((prevs)=>{
+          return{
+            ...prevs,
+            ['userId']:userId
+          }
+        })
+      }    
     const setTransactionCategories = (categories) => {
         setBudgetData((prevs) => {
             return {
                 ...prevs,
-                ['targetCategories']: [...categories],
+                ['targetCategories']: categories,
             }
         })
     }
 
+    useEffect(()=>{
+     setUserId()
+    },[])
     const inputHandler = (event) => {
         const { name, value } = event.target
+      
         setBudgetData((prevs) => {
             return {
                 ...prevs,
-                [name]: value
+                [name]: name=='amount' ? Number.parseInt(value):value
             }
         })
     }
 
     function validator() {
-        if (budgetData.amount > 0 && budgetData.icon.length > 0 && budgetData.note.length > 0) {
+        if (budgetData.amount > 0 && budgetData.targetCategories.length > 0 && budgetData.startedDate !== new Date() && budgetData.endDate !== new Date() && budgetData.startedDate < budgetData.endDate) {
             setDisable(false)
         } else {
             setDisable(true)
@@ -37,15 +54,24 @@ export default function addNewBudgetModal(props) {
     }, [inputHandler])
 
 
-    function submit() {
-        // todo . . .
-        console.log(budgetData)
+    async function submit() {
+        let myBudget = budgetData;
+        myBudget.startedDate = new Date(myBudget.startedDate)
+        myBudget.endDate = new Date(myBudget.endDate)
+
+
+        const request = await axios.post(`${process.env.API_URL}/budget`,myBudget,{headers:{token:userId}})
+        const data = request.data
+        if(data.state){
+            console.log(myBudget)
+            dispatch(addingNewBudget(data.data))            
+        }
         props.toggle()
         reset()
     }
 
     function reset() {
-        setBudgetData({ title: '', icon: '', type: '', date: new Date(), note: '', amount: 0 })
+        setBudgetData({userId:userId, title: '', targetCategories: [],startDate:new Date(),endDate: new Date(), note: '', amount: 0 })
     }
     return (
         <>
@@ -87,7 +113,7 @@ export default function addNewBudgetModal(props) {
                                 label="Start date"
                                 className="mb-3"
                             >
-                                <Form.Control type={`date`} name='startDate' value={budgetData.startDate} onChange={inputHandler} />
+                                <Form.Control type={`date`} name='startedDate' value={budgetData.startedDate} onChange={inputHandler} />
                             </FloatingLabel>
                         </div>
                         <div className='col-sm-12 col-md-6 col-lg-6'>

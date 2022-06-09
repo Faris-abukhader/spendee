@@ -34,7 +34,6 @@ export default function OverviewCards() {
           amount: totalIncome
         }
       ]
-  console.log(totalCash)
   return (
     <ul className="report list-group list-group-horizontal overflow-auto my-2 px-0 mx-0" style={{width: '100%' }}>
       {data.map((item, index) => {

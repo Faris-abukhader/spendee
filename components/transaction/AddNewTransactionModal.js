@@ -1,14 +1,14 @@
 import { useState ,useEffect} from 'react'
-import { getSession } from "next-auth/react"
 import { Modal, FloatingLabel,Form } from 'react-bootstrap'
 import TransactionCategorySelector from './transactionCategorySelector'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { addNewTransaction, setTransaction } from '../../store/slices/transactionSlice'
+import { addNewTransaction } from '../../store/slices/transactionSlice'
 export default function addNewTransactionModal(props) {
 
   const userId = useSelector(state=>state.user.id)
-  var [transactionData,setTransactionData] = useState({id:' ',type:' ',title:' ',icon:' ',categoryId:' ',date:new Date(),note:' ',amount:0})
+  const budgets = useSelector(state=>state.budget)
+  var [transactionData,setTransactionData] = useState({id:' ',type:' ',title:' ',icon:' ',categoryId:' ',budgetId:' ',date:new Date(),note:' ',amount:0})
   var [disable,setDisable] = useState(true)
   const dispatch = useDispatch()
 
@@ -40,9 +40,9 @@ export default function addNewTransactionModal(props) {
   const inputHandler = (event)=>{
     let {name,value} = event.target
 
-    if(name==='date'){
-      value = new Date(value)
-    }
+    // if(name==='date'){
+    //   value = new Date(value)
+    // }
 
       setTransactionData((prevs)=>{
         return{
@@ -66,12 +66,33 @@ export default function addNewTransactionModal(props) {
 
 
   const  submit = async()=> {
-    
+
+    // checking if the transaction belong to any budget . . . 
+    budgets.map((item)=>{
+      item.categories.map((category)=>{
+         if(category.categoryId==transactionData.categoryId){
+           if(transactionData.date>=item.startedDate && transactionData.date<=item.endDate){
+             setTransactionData((prevs)=>{
+              return {
+                ...prevs,
+                ['budgetId']:item.id
+              }
+             })
+           }
+         }
+      })
+    })
+
+    // create date object for backend
+    let data = transactionData
+    data.date = new Date(data.date)
+
+
     const request = await axios.post(`${process.env.API_URL}/transaction`,transactionData)
     const response = await request.data
 
+    console.log(response)
     if(response.state){
-      // dispatch(setTransaction(transactionData))
       dispatch(addNewTransaction(transactionData))
       reset()
     }
@@ -79,7 +100,7 @@ export default function addNewTransactionModal(props) {
   }
 
   function reset(){
-    setTransactionData({title:'',icon:'',type:'',date:new Date(),note:'',amount:0})
+    setTransactionData({id:userId,title:'',icon:'',type:'',date:new Date(),note:'',amount:0})
   }
 
   return (

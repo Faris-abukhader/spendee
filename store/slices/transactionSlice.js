@@ -7,8 +7,6 @@ export const transactionSlice = createSlice({
   initialState,
   reducers: {
     setTransaction: (state,{payload}) =>{
-      console.log('from setTransaction')
-      console.log(payload)
       if(payload !== undefined){
         return [...payload]
       }

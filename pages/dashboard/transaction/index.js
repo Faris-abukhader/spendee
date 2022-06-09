@@ -10,6 +10,7 @@ import AddNewTransactionModal from '../../../components/transaction/AddNewTransa
 import OverviewCard from '../../../components/home/OverviewCards'
 import { useSelector } from 'react-redux'
 import { setUser } from '../../../store/slices/userSlice'
+import { setBudget } from '../../../store/slices/budgetSlice'
 export default function index({ id }) {
   var [showModal, dispatchModal] = useState(false)
   var transactions = useSelector((state) => state.transaction)
@@ -41,6 +42,7 @@ export default function index({ id }) {
             <small style={{ opacity: '0.8' }}>You have no transactions yet</small>
           </div>
         }
+
       </div>
     </ClientLayout>
   )
@@ -52,7 +54,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (ctx
   if (session) {
     const dataList = session.user.email.split(',')
     const id = dataList[1]
-
 
     const data =  await axios.get(`${process.env.API_URL}/user/${id}`,{
       method:"GET",
@@ -68,11 +69,14 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (ctx
     if(user.state){
         const userInfo = {username:user.data.firstName+' '+user.data.secondName,id:user.data.id,email:user.data.email,image:user.data.image,age:user.data.age}
         store.dispatch(setUser(userInfo))
-        if(user.transactions!== undefined){
+
+        if(user.data.transactions!== undefined){
           store.dispatch(setTransaction(user.data.transactions))
         }
+        if(user.data.budgets !== undefined){
+          store.dispatch(setBudget(user.data.budgets))
+        }
         store.dispatch(setTransactionCategory(user.data.transactionCategories))
-        // store.dispatch(setBudget(user.budgets))
         
     }
 
