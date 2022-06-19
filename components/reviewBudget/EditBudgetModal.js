@@ -1,23 +1,28 @@
 import { useState, useEffect } from 'react'
 import { Modal, FloatingLabel, Form } from 'react-bootstrap'
-import BudgetCategoriesSelector from './BudgetCategoriesSelector'
+import BudgetCategoriesSelector from '../budget/BudgetCategoriesSelector'
 import axios from 'axios'
-import { useSelector,useDispatch } from 'react-redux'
-import { addingNewBudget } from '../../store/slices/budgetSlice'
-export default function addNewBudgetModal(props) {
-    let [budgetData, setBudgetData] = useState({userId:'', title: '', targetCategories: [],startedDate:new Date(),endDate: new Date(), amount: 0 })
+import { useSelector, useDispatch } from 'react-redux'
+import { modifyOneBudget } from '../../store/slices/budgetSlice'
+export default function editBudgetModal(props) {
+    let [budgetData, setBudgetData] = useState({ userId: '',id:'', name: '', targetCategories: [], startedDate: new Date(), endDate: new Date(), amount: 0 })
     let [disable, setDisable] = useState(true)
     const dispatch = useDispatch()
-    const userId = useSelector(state=>state.user.id)
+    const userId = useSelector(state => state.user.id)
 
-    const setUserId = ()=>{
-        setBudgetData((prevs)=>{
-          return{
-            ...prevs,
-            ['userId']:userId
-          }
+    
+    const setBudget = () => {
+        setBudgetData({
+            userId: userId,
+            id:props.data.id,
+            name:props.data.name,
+            targetCategories:props.data.categories,
+            startedDate:props.data.startedDate && props.data.startedDate.substring(0,10),
+            endDate:props.data.endDate && props.data.endDate.substring(0,10),
+            amount:props.data.amount
+            
         })
-      }    
+    }
     const setTransactionCategories = (categories) => {
         setBudgetData((prevs) => {
             return {
@@ -26,17 +31,14 @@ export default function addNewBudgetModal(props) {
             }
         })
     }
-
-    useEffect(()=>{
-     setUserId()
-    },[])
+    
     const inputHandler = (event) => {
         const { name, value } = event.target
-      
+
         setBudgetData((prevs) => {
             return {
                 ...prevs,
-                [name]: name=='amount' ? Number.parseInt(value):value
+                [name]: name == 'amount' ? Number.parseInt(value) : value
             }
         })
     }
@@ -53,6 +55,9 @@ export default function addNewBudgetModal(props) {
         validator()
     }, [inputHandler])
 
+    useEffect(() => {
+        setBudget()
+    }, [props])
 
     async function submit() {
         let myBudget = budgetData;
@@ -60,17 +65,23 @@ export default function addNewBudgetModal(props) {
         myBudget.endDate = new Date(myBudget.endDate)
 
 
-        const request = await axios.post(`${process.env.API_URL}/budget`,myBudget,{headers:{token:userId}})
+        let targetCateg = myBudget.targetCategories.map((item)=>({id:item.id,categoryId:item.categoryId}))
+
+        myBudget.targetCategories = targetCateg
+
+        
+        const request = await axios.put(`${process.env.API_URL}/budget/${myBudget.id}`, myBudget, { headers: { token: userId } })
         const data = request.data
-        if(data.state){
-            dispatch(addingNewBudget(data.data))            
+        if (data.state) {
+            dispatch(modifyOneBudget(data.data))
+            props.isLoad((prevs)=>!prevs)
         }
         props.toggle()
         reset()
     }
 
     function reset() {
-        setBudgetData({userId:userId, title: '', targetCategories: [],startDate:new Date(),endDate: new Date(), note: '', amount: 0 })
+        setBudgetData({ userId: userId, name: '', targetCategories: [], startDate: new Date(), endDate: new Date(), note: '', amount: 0 })
     }
     return (
         <>
@@ -86,7 +97,7 @@ export default function addNewBudgetModal(props) {
                                 controlId="floatingInput"
                                 label="Title"
                                 className="mb-3">
-                                <Form.Control type={`text`} name='title' value={budgetData.title} onChange={inputHandler} />
+                                <Form.Control type={`text`} name='name' value={budgetData.name} onChange={inputHandler} />
                             </FloatingLabel>
                         </div>
                         <div className='col-sm-12 col-md-6 col-lg-6'>
@@ -101,7 +112,7 @@ export default function addNewBudgetModal(props) {
                             <div className='my-3' style={{ fontSize: '1rem' }}><img className='me-2' src='/icons/budget/filter.svg' />Budget Category</div>
                             <small style={{ color: 'rgb(0,0,0,0.7)' }}>category</small>
                             <div className='py-3' style={{ width: '100%', display: 'flex', flexDirection: 'row', alignContent: 'center', justifyContent: 'start', overflowY: 'auto' }}>
-                                <BudgetCategoriesSelector setTransactionCategories={setTransactionCategories} />
+                                <BudgetCategoriesSelector setTransactionCategories={setTransactionCategories} pickedCategories={budgetData.targetCategories} />
                             </div>
                         </div>
                         <div className='col-sm-12 col-md-6 col-lg-6'>
@@ -116,7 +127,7 @@ export default function addNewBudgetModal(props) {
                             </FloatingLabel>
                         </div>
                         <div className='col-sm-12 col-md-6 col-lg-6'>
-                        <FloatingLabel
+                            <FloatingLabel
                                 controlId="floatingInput"
                                 label="End date"
                                 className="mb-3"

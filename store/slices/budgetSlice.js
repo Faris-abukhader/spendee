@@ -18,7 +18,12 @@ export const budgetSlice = createSlice({
         state = state.filter((item)=>item.id!=payload)
     },
     modifyOneBudget: (state,{payload}) =>{
-        state = state.map((item)=>{if(item.id==payload.id){item = payload}})
+        return  state.map((item)=>{
+          if(item.id != payload.id){
+            return item
+          }
+          return payload
+        })
     },
   },
   extraReducers:{

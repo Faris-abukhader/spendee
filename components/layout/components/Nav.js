@@ -4,7 +4,7 @@ import { Dropdown, ButtonGroup } from 'react-bootstrap'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { useSelector } from 'react-redux'
-export default function Nav() {
+export default function Nav({page}) {
     var [showOffCanvas, setShowOffCanvas] = useState(false)
     const user = useSelector((state)=>state.user)
 
@@ -13,7 +13,7 @@ export default function Nav() {
     }
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light" style={{ boxShadow: "0px 1px 5px rgba(128, 128, 128, 0.5)" }}>
+            <nav className="navbar navbar-expand-lg navbar-light" style={{boxShadow: '1px 1px 4px 1px rgba(34,41,47,0.12)!important'}}>
                 <div className="container-fluid my-0 py-0" style={{ width: '100%' }}>
                     <Link href={`/`}>
                     <a className="navbar-brand">
@@ -27,17 +27,17 @@ export default function Nav() {
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item">
                                 <Link href={`/dashboard/transaction`}>
-                                <a className="nav-link active" aria-current="page"><strong>Transactions</strong></a>
+                                <a className={`nav-link ${page=='transactions' ? 'active':''}`} aria-current="page"><strong>Transactions</strong></a>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link  href={`/dashboard/budget`}>
-                                <a className="nav-link" href="#"><strong>Budget</strong></a>
+                                <a className={`nav-link ${page=='budgets' ? 'active':''}`} href="#"><strong>Budget</strong></a>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                <Link href={`/dashboard/settings`}>
-                                <a className="nav-link" href="#"><strong>Settings</strong></a>
+                                <a className={`nav-link ${page=='settings' ? 'active':''}`} href="#"><strong>Settings</strong></a>
                                 </Link>
                             </li>
                         </ul>

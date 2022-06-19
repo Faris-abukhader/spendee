@@ -8,22 +8,12 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state,{payload}) =>{
-      // console.log('from set user ')
-  
-
-      // state = payload
       return {...state,...payload}
-      // state.push(payload)
     }, 
   },
   extraReducers:{
    [HYDRATE]: (state,{payload}) =>{
-    // state.push(payload)
     return {...state,...payload.user}
-
-    // console.log('from user extra reducer')
-    // console.log(payload.user)
-    // return [...state,payload.user]
    }
   },
 })

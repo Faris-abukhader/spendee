@@ -5,19 +5,17 @@ import TransactionCategorySelector from './transactionCategorySelector'
 import axios from 'axios'
 import { modifyOneTransaction } from '../../store/slices/transactionSlice'
 import { useDispatch } from 'react-redux'
-export default function ({show,toggle,itemId}) {
-  const [transaction] = useSelector((state)=>state.transaction.filter((item)=>item.id==itemId))
-
+export default function ({show,toggle,itemData}) {
   var [transactionData,setTransactionData] = useState({id:'',type:'',title:'',icon:'',categoryId:'',date:new Date(),note:'',amount:0})
   const dispatch = useDispatch()
 
   const dispatchTransactionData = ()=>{
-    setTransactionData({id:transaction.id,type:transaction.type,title:transaction.title,icon:transaction.icon,categoryId:transaction.category,date:new Date(transaction.date).toISOString().split('T')[0],note:transaction.note,amount:transaction.amount})
+    setTransactionData({id:itemData.id,type:itemData.type,title:itemData.title,icon:itemData.icon,itemData:itemData.category,date:new Date(itemData.date),note:itemData.note,amount:itemData.amount})
   }
 
   useEffect(()=>{
     dispatchTransactionData()
-  },[transaction])
+  },[itemData])
 
   
   const  setTransactionIdTitleTypeAndIcon = (id,title,type,icon)=>{
@@ -49,7 +47,6 @@ export default function ({show,toggle,itemId}) {
     let data = transactionData
     data.date = new Date(transactionData.date)
 
-    if(transactionData.type=='expense'){transactionData.amount *= -1 }
     const request = await axios.put(`${process.env.API_URL}/transaction/${transactionData.id}`,data)
     const response = await request.data
 
@@ -76,7 +73,7 @@ export default function ({show,toggle,itemId}) {
         <Modal.Body>
           <div className='row align-items-center justify-content-center'>
           <div className='col-sm-12 col-md-6 col-lg-6'>
-          <TransactionCategorySelector icon={transactionData.icon} title={transactionData.title}  itemId={itemId} setTransactionIdTitleTypeAndIcon={setTransactionIdTitleTypeAndIcon}/>
+          <TransactionCategorySelector icon={transactionData.icon} title={transactionData.title}  itemId={itemData.id} setTransactionIdTitleTypeAndIcon={setTransactionIdTitleTypeAndIcon}/>
           </div>
             <div className='col-sm-12 col-md-6 col-lg-6'>
               <FloatingLabel

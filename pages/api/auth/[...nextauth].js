@@ -1,15 +1,6 @@
 import NextAuth from "next-auth"
 import CredentialsProvider  from "next-auth/providers/credentials";
 import('next').NextConfig
-import EventEmitter from "../../../utils/EventEmitter";
-
-let newUserData = null
-EventEmitter.addListener('reloadSession',(data)=>{
-  console.log('got event')
-  newUserData.email = data.email
-  newUserData.name = data.firstName+' '+data.secondName
-  newUserData.image = data.image
-})
 
 export default NextAuth({
   secret: process.env.JWT_SECRET,
@@ -83,9 +74,6 @@ export default NextAuth({
             session.token = token
           }
 
-          if(newUserData){
-            session.user = newUserData
-          }
           return session
         },
         jwt:async({token,user,account,profile})=>{

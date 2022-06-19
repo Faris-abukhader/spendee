@@ -1,77 +1,96 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
-LinearScale,PointElement,
-LineElement,
-Title,
-Tooltip,
-Legend,
+  LinearScale, PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 ChartJS.register(
-CategoryScale,
-LinearScale,
-PointElement,
-LineElement,
-Title,
-Tooltip,
-Legend
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
 );
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
+import { setTransaction, addNewTransaction, deleteOneTransaction, modifyOneTransaction } from '../../store/slices/transactionSlice';
+export default function LineChart({transactions}) {
+  const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var [monthAmount, setMonthAmount] = useState({ 'Jan': 0, 'Feb': 0, 'Mar': 0, 'Apr': 0, 'May': 0, 'Jun': 0, 'Jul': 0, 'Aug': 0, 'Sep': 0, 'Oct': 0, 'Nov': 0, 'Dec': 0 })
+  var transactionData = new Map();
 
-  export default function PolarChart() {
-    console.log('2022-05-15T00:00:00.000Z'.substring(8,10))
-    //   var [data,setData] = useState({labels:['Red','Green','Custom'],datasets:[{data:[5,4,3],backgroundColor:['#7944d0','green','gray']}]})
-    const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const transactionMonths = [];
-    const transactions = useSelector(state=>state.transaction.map((item)=>{
-      // console.log((Number.parseInt(item.date.toString().substring(8,10))-1))
-      // console.log(monthArray[(Number.parseInt(item.date.toString().substring(8,10))-1)])
-      // transactionMonths.push(monthArray[item.date.toString().substring(8,10)-1])
-      if(item.type=='income'){
-        return item.amount
-      }else{
-        return -item.amount
-      }
-    }))
+  const getMonth = (sqlDate) => {
+    var sqlDateArr1 = sqlDate.split("-");
+    var month = sqlDateArr1[1]
+    return Number.parseInt(month)
+  }
 
-    // console.log(transactions)
-    
-    const options = {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: '',
-        },
+
+  transactions.map((item) => {
+    // for transactions line chart
+    // getting each month total transactions amount
+    let sign = item.type == 'income' ? 1 : -1
+    if (transactionData.has(getMonth(item.date))) {
+      transactionData.set(getMonth(item.date), (transactionData.get(getMonth(item.date)) + (sign * item.amount)))
+    } else {
+      transactionData.set(getMonth(item.date), sign * item.amount)
+    }
+  })
+
+
+  const setMonthData = () => {
+    transactionData.forEach((item, key) => {
+      setMonthAmount((prevs) => {
+        return {
+          ...prevs,
+          [monthArray[key]]: item
+        }
+      })
+    })
+  }
+
+  useEffect(() => {
+    setMonthData()
+  }, [transactions])
+
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
       },
-    };
-    console.log(transactionMonths)
-//     const array = [];
-// mySet.forEach(v => array.push(v));
-   const data = {
+      title: {
+        display: true,
+        text: '',
+      },
+    },
+  };
+
+  const data = {
     monthArray,
     datasets: [
       {
         label: 'Transaction',
-        data: transactions,
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        data: monthAmount,
+        borderColor: 'rgb(0,157,255)',
+        backgroundColor: 'rgba(0,157,255, 0.5)',
       }
     ],
   };
-    return (
+  return (
 
-        <div className='text-center row align-items-center justify-content-center m-1'  style={{height:'350px',background:'white',boxShadow:'2px 4px 8px 2px rgba(34,41,47,.12)!important',borderRadius:'8px'}}>
-        <h1 className='col-12'>LineChart</h1>
-        <div className='col-12' style={{width:'100%'}}>
-        <Line style={{width:'100%'}} options={options} data={data}  />
-        </div>
+    <div className='text-center row align-items-center justify-content-center m-1' style={{ height: '350px', background: 'white', boxShadow: '1px 1px 4px 1px rgba(34,41,47,0.12)!important', borderRadius: '8px' }}>
+      <h3 className='col-12'>Transactions</h3>
+      <div className='col-12' style={{ width: '100%' }}>
+        <Line style={{ width: '100%' }} options={options} data={data} />
+      </div>
     </div>
-    )
-  }
-  
+  )
+}

@@ -15,10 +15,10 @@ export default function index() {
   var budgetData = useSelector((state)=>state.budget)
 
   return (
-      <Layout>
+      <Layout page={'budgets'}>
     <div className='row align-items-center justify-content-start px-3'>
-    {budgetData && budgetData.map((item)=><BudgetCard data={item}/>)}
     <AddNewBudgetCard/>
+    {budgetData && budgetData.map((item)=><BudgetCard data={item}/>)}
     
 
     </div>

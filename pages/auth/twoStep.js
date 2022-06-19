@@ -68,7 +68,6 @@ export default function twoSetp({apiEndpoint}) {
 }
 export const getServerSideProps = async()=>{
   const apiEndPoint = process.env.API_URL
-  console.log(apiEndPoint)
   return{
     props:{
       apiEndpoint:apiEndPoint

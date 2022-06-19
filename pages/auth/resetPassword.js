@@ -14,7 +14,6 @@ export default function resetPassword({apiEndpoint,token}) {
 
 
     function isEnable(){
-        console.log(passwordStrength(password).value)
         if(passwordStrength(password).value ==='Medium'){
             setDisble(false)
             
@@ -26,7 +25,6 @@ export default function resetPassword({apiEndpoint,token}) {
      function submit(){
        axios.post(`${apiEndpoint}/password/reset`,{password:password},{headers:{"X-auth-token":token}})
        .then((response)=>{
-         console.log(response)
           if(response.data.state){
             router.push(`/auth/signIn`)
            }

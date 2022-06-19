@@ -1,6 +1,5 @@
 import {useState} from 'react'
 import { FloatingLabel,Form } from 'react-bootstrap'
-import EventEmitter from '../../utils/EventEmitter'
 export default function Accounts() {
 
   var [userData,setUserData] = useState({email:'',firstName:'',secondName:'',image:'',gender:'',age:0})
@@ -8,9 +7,6 @@ export default function Accounts() {
 
   function submit(){
     // . . . 
-
-    EventEmitter.emit('reloadSession',{userData})
-    EventEmitter.emit('testEvent',{userData})
 
   }
 

@@ -84,7 +84,7 @@ export default function TransactionListItem({ data,showDivider }) {
         </div>
       </div>
       {showDivider && <hr className="dropdown-divider my-2" style={{ maxWidth: '90%', margin: '0 auto' }} /> }
-      <EditTransactionModal show={showEditModal} toggle={modalToggle} itemId={data.id} />
+      <EditTransactionModal show={showEditModal} toggle={modalToggle} itemData={data} />
     </>
   )
 }

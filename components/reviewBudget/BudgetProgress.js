@@ -1,9 +1,38 @@
-import React from 'react'
+import {useState,useEffect} from 'react'
 
-export default function BudgetProgress() {
+export default function BudgetProgress({transactions,amount,progressNumbers,messageIndex}) {
+    var messages = [
+        `Keep spending. You can spend ${progressNumbers.youCanSpend} USD each day for the rest of the period.`,
+        `out of period`,
+        ` over`
+    ]
+    var [percentage,setPercentage] = useState(0)
+    var [reminder ,setReminder] = useState(0)
+    var [message,setMessage] = useState(messages[messageIndex])
+
+
+
+
+
+    const percentageHandler = ()=>{
+        let totalAmount = 0
+        if(transactions){
+            transactions.map((item)=>{
+                totalAmount+=item.amount
+             })     
+        }
+        setReminder(amount-totalAmount)
+        setPercentage(totalAmount/amount * 100)
+    }
+
+    useEffect(()=>{
+     percentageHandler()
+     setMessage(messages[messageIndex])
+    },[progressNumbers])
+
 
     const changeIndicatorColor = () => ({
-        width: `${40}%`,
+        width: `${percentage}%`,
         background: `rgb(24, 178, 114)`,
         height: '35px'
     })
@@ -15,13 +44,13 @@ export default function BudgetProgress() {
                     Budget progress
                 </div>
                 <div className='text-center my-4'>
-                    Keep spending. You can spend 24.00 USD each day for the rest of the period.
+                    {message && message}
                 </div>
 
                 <div className='row justify-content-center align-items-center my-5'>
                     <div className='col-9'>
                     <div  className='progress' style={{ height: '35px' }}>
-                        <div className='prgoress-bar' style={changeIndicatorColor()}><div className='ms-2' style={{ fontSize: '15px' }}>{40}%</div></div>
+                        <div className='prgoress-bar' style={changeIndicatorColor()}><div className='ms-2' style={{ fontSize: '15px' }}>{percentage.toFixed(2)}%</div></div>
                     </div>
                     </div>
                 </div>

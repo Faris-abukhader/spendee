@@ -4,22 +4,9 @@ import icons from '../../public/icons/categories/iconsList.json'
 import CategoryCard from './components/CategoryCard'
 import ColorSelector from './components/ColorSelector'
 import { FloatingLabel,Form } from 'react-bootstrap'
-import EventEmitter from '../../utils/EventEmitter'
 export default function AllCategories() {
   var [selectedIcon,selectIcon] = useState({icon:icons.at(2).icon})
   var [userData,setUserData] = useState({email:'',firstName:'',secondName:'',image:'',gender:'',age:0})
-   
-
-  
-  useEffect(()=>{
-    const listener = EventEmitter.addListener('testEvent',(data)=>{
-      console.log('from listener')
-      console.log(data)
-      setUserData({email:'fares@yahoo.com',firstName:'',secondName:'',image:'',gender:'',age:0})
-    })
-    return ()=>{listener.remove()}
-   },[])
-
    
 
   return (

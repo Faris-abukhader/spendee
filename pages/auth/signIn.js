@@ -38,8 +38,6 @@ export default function SignIn({ csrfToken }) {
       email:user.email,
       password:user.password
     });
-
-    console.log(test)
   }
 
 

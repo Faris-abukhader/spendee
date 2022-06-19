@@ -1,12 +1,17 @@
 import { useState, useEffect, useRef, Fragment } from 'react'
 import { OverlayTrigger, Popover, FloatingLabel, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-export default function BudgetCategoriesSelector({setTransactionCategories}) {
+export default function BudgetCategoriesSelector({setTransactionCategories , pickedCategories}) {
     const categoriesList = useSelector(state=>state.transactionCategory[0])
     const [show, setShow] = useState(false);
     const target = useRef(null);
     const [selectedCategory,SetCategory] = useState([])
 
+    if(pickedCategories){
+        useEffect(()=>{
+          SetCategory(pickedCategories)
+        },[])
+    }
 
     const checkboxHandler = (event)=>{
      const {value,checked} = event.target
@@ -30,11 +35,10 @@ export default function BudgetCategoriesSelector({setTransactionCategories}) {
     }
 
     const assignCateogry = ()=>{
-        console.log(selectedCategory)
      setTransactionCategories(selectedCategory)
     }
 
-    console.log(selectedCategory.map((item)=>item.categoryId).indexOf('cl3s5wq4t0003z4qpt8qy6aor'))
+
     const ExpenseCategoryList = (
         categoriesList.filter((item) => item.type == 'expense').map((category) =>
             <Fragment key={category.id}>
